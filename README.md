@@ -11,6 +11,11 @@ Slic3r is mainly a **toolpath generator** for 3D printers: it reads 3D models (S
 
 Slic3r was born in **2011** within the RepRap community and thanks to its high configurability became the swiss-army knife for 3D printing. It served as a platform for implementing several **new (experimental) ideas that later became technology standards**, such as multiple extruders, brim, variable-height layers, per-object settings, modifiers, post-processing scripts, G-code macros and more. Despite being based on volunteer efforts, Slic3r is still pushing the boundaries of 3D printing.
 
+<<<<<<< HEAD
+=======
+Slic3r has been rebased from the active PrusaSlicer and SuperSlicer forks with an eye towards continuing pushing the boundaries of 3D printing and being an slicer for all printers.
+
+>>>>>>> origin/merill-merge
 Slic3r is:
 
 * **Open:** it is totally **open source** and it's **independent from any commercial company** or printer manufacturer. We want to keep 3D printing open and free.
@@ -22,7 +27,11 @@ Slic3r is:
 * **Embeddable:** a complete and powerful command line interface allows Slic3r to be used from the shell or integrated with server-side applications.
 * **Powerful:** see the list below!
 
+<<<<<<< HEAD
 See the [project homepage](https://slic3r.org/) at slic3r.org for more information.
+=======
+See the [project homepage](http://slic3r.org/) at slic3r.org for more information.
+>>>>>>> origin/merill-merge
 
 ### <a name="features"></a>Features
 
@@ -44,7 +53,11 @@ The core parts of Slic3r are written in C++11, with multithreading. The graphica
 
 ### How to install?
 
+<<<<<<< HEAD
 You can download a precompiled package from [slic3r.org](https://slic3r.org/) (releases) or from [dl.slicr3r.org](https://dl.slic3r.org/dev/) (automated builds).
+=======
+You can download a precompiled package from [slic3r.org](http://slic3r.org/) (releases) or from [dl.slicr3r.org](http://dl.slic3r.org/dev/) (automated builds).
+>>>>>>> origin/merill-merge
 
 If you want to compile the source yourself follow the instructions on one of these wiki pages:
 * [Linux](https://github.com/slic3r/Slic3r/wiki/Running-Slic3r-from-git-on-GNU-Linux)
@@ -58,6 +71,7 @@ Sure, but please read the
 document first!
 
 ### Directory structure
+<<<<<<< HEAD
 
 * `package/`: the scripts used for packaging the executables
 * `src/`: the C++ source of the `slic3r` executable and the CMake definition file for compiling it
@@ -79,4 +93,36 @@ Contributions by Henrik Brix Andersen, Vojtech Bubnik, Nicolas Dandrimont, Mark 
 
 ### How can I invoke Slic3r using the command line?
 
+=======
+
+* `package/`: the scripts used for packaging the executables
+* `src/`: the C++ source of the `slic3r` executable and the CMake definition file for compiling it
+* `src/slic3r/GUI`: The C++ GUI.
+* `tests`: Test suite for Slic3r. Implemented with [Catch2](https://github.com/catchorg/Catch2)
+* `t/`: the really old test suite (deprecated)
+* `utils/`: various useful scripts
+* `src/libslic3r/`: C++ sources for libslic3r
+* `xs/xsp/`: bindings for calling libslic3r from Perl (XS) (deprecated)
+
+## Licensing and attribution
+
+Slic3r is licensed under the _GNU Affero General Public License, version 3_.
+
+PrusaSlicer is licensed under the _GNU Affero General Public License, version 3_.
+PrusaSlicer is owned by Prusa Research.
+PrusaSlicer is originally based on Slic3r by Alessandro Ranellucci.
+
+The _GNU Affero General Public License, version 3_ ensures that if you **use** any part of this software in any way (even behind a web server), your software must be released under the same license.
+
+### Acknowledgements
+
+The main author of Slic3r is Alessandro Ranellucci (@alranel, *Sound* in IRC, [@alranel](http://twitter.com/alranel) on Twitter), who started the project in 2011.
+
+Joseph Lenox (@lordofhyphens, *LoH* in IRC, [@LenoxPlay](http://twitter.com/LenoxPlay) on Twitter) is the current co-maintainer.
+
+Contributions by Henrik Brix Andersen, Vojtech Bubnik, Nicolas Dandrimont, Mark Hindess, Petr Ledvina, Y. Sapir, Mike Sheldrake, Kliment Yanev and numerous others. Original manual by Gary Hodgson. Slic3r logo designed by Corey Daniels, <a href="http://www.famfamfam.com/lab/icons/silk/">Silk Icon Set</a> designed by Mark James, stl and gcode file icons designed by Akira Yasuda.
+
+### How can I invoke Slic3r using the command line?
+
+>>>>>>> origin/merill-merge
 The command line is documented in the relevant [manual page](https://manual.slic3r.org/advanced/command-line).

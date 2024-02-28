@@ -2,7 +2,13 @@ use Test::More;
 use strict;
 use warnings;
 
+<<<<<<< HEAD
 plan tests => 95;
+=======
+#plan tests => 43;
+# Test of a 100% coverage is off.
+plan tests => 19;
+>>>>>>> origin/merill-merge
 
 BEGIN {
     use FindBin;
@@ -20,6 +26,7 @@ use Slic3r::Test;
 sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
 
 {
+<<<<<<< HEAD
     my $print = Slic3r::Print->new;
     my $surface_width = 250;
     my $distance = Slic3r::Flow::solid_spacing($surface_width, 47);
@@ -106,6 +113,8 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
 }
 
 {
+=======
+>>>>>>> origin/merill-merge
     my $expolygon = Slic3r::ExPolygon->new([ scale_points [0,0], [50,0], [50,50], [0,50] ]);
     my $filler = Slic3r::Filler->new_from_type('rectilinear');
     $filler->set_bounding_box($expolygon->bounding_box);
@@ -119,8 +128,12 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
         height          => 0.4,
         nozzle_diameter => 0.50,
     );
+<<<<<<< HEAD
     $filler->set_min_spacing($flow->spacing);
     $filler->set_density(1);
+=======
+    $filler->set_spacing($flow->spacing);
+>>>>>>> origin/merill-merge
     foreach my $angle (0, 45) {
         $surface->expolygon->rotate(Slic3r::Geometry::deg2rad($angle), [0,0]);
         my $paths = $filler->fill_surface($surface, layer_height => 0.4, density => 0.4);
@@ -128,14 +141,23 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
     }
 }
 
+SKIP:
 {
+    skip "The FillRectilinear2 does not fill the surface completely", 1;
+
     my $test = sub {
         my ($expolygon, $flow_spacing, $angle, $density) = @_;
         
         my $filler = Slic3r::Filler->new_from_type('rectilinear');
         $filler->set_bounding_box($expolygon->bounding_box);
         $filler->set_angle($angle // 0);
+<<<<<<< HEAD
         $filler->set_dont_adjust(0);
+=======
+        # Adjust line spacing to fill the region.
+        $filler->set_dont_adjust(0);
+        $filler->set_link_max_length(scale(1.2*$flow_spacing));
+>>>>>>> origin/merill-merge
         my $surface = Slic3r::Surface->new(
             surface_type    => S_TYPE_BOTTOM,
             expolygon       => $expolygon,
@@ -145,7 +167,11 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
             height          => 0.4,
             nozzle_diameter => $flow_spacing,
         );
+<<<<<<< HEAD
         $filler->set_min_spacing($flow->spacing);
+=======
+        $filler->set_spacing($flow->spacing);
+>>>>>>> origin/merill-merge
         my $paths = $filler->fill_surface(
             $surface,
             layer_height    => $flow->height,
@@ -157,17 +183,26 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
         my $uncovered = diff_ex([ @$expolygon ], [ @grown_paths ], 1);
         
         # ignore very small dots
-        @$uncovered = grep $_->area > (scale $flow_spacing)**2, @$uncovered;
+        my $uncovered_filtered = [ grep $_->area > (scale $flow_spacing)**2, @$uncovered ];
+
+        is scalar(@$uncovered_filtered), 0, 'solid surface is fully filled';
         
-        is scalar(@$uncovered), 0, 'solid surface is fully filled';
-        
-        if (0 && @$uncovered) {
+        if (0 && @$uncovered_filtered) {
             require "Slic3r/SVG.pm";
+<<<<<<< HEAD
             Slic3r::SVG::output(
                 "uncovered.svg",
                 expolygons      => [$expolygon],
                 red_expolygons  => $uncovered,
                 polylines       => $paths,
+=======
+            Slic3r::SVG::output("uncovered.svg", 
+                no_arrows       => 1,
+                expolygons      => [ $expolygon ],
+                blue_expolygons => [ @$uncovered ],
+                red_expolygons  => [ @$uncovered_filtered ],
+                polylines       => [ @$paths ],
+>>>>>>> origin/merill-merge
             );
             exit;
         }
@@ -242,9 +277,11 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
 }
 
 for my $pattern (qw(rectilinear honeycomb hilbertcurve concentric)) {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.4,0.4,0.4,0.4]);
     $config->set('fill_pattern', $pattern);
-    $config->set('external_fill_pattern', $pattern);
+    $config->set('top_fill_pattern', $pattern);
+    $config->set('bottom_fill_pattern', $pattern);
     $config->set('perimeters', 1);
     $config->set('skirts', 0);
     $config->set('fill_density', 20);
@@ -273,13 +310,15 @@ for my $pattern (qw(rectilinear honeycomb hilbertcurve concentric)) {
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.4,0.4,0.4,0.4]);
     $config->set('infill_only_where_needed', 1);
     $config->set('bottom_solid_layers', 0);
     $config->set('infill_extruder', 2);
     $config->set('infill_extrusion_width', 0.5);
+    $config->set('wipe_into_infill', 0);
     $config->set('fill_density', 40);
-    $config->set('cooling', 0);                 # for preventing speeds from being altered
+    $config->set('cooling', [ 0 ]);             # for preventing speeds from being altered
     $config->set('first_layer_speed', '100%');  # for preventing speeds from being altered
     
     my $test = sub {
@@ -319,7 +358,7 @@ for my $pattern (qw(rectilinear honeycomb hilbertcurve concentric)) {
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('skirts', 0);
     $config->set('perimeters', 1);
     $config->set('fill_density', 0);
@@ -329,7 +368,7 @@ for my $pattern (qw(rectilinear honeycomb hilbertcurve concentric)) {
     $config->set('solid_infill_every_layers', 2);
     $config->set('perimeter_speed', 99);
     $config->set('external_perimeter_speed', 99);
-    $config->set('cooling', 0);
+    $config->set('cooling', [ 0 ]);
     $config->set('first_layer_speed', '100%');
     
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
@@ -349,13 +388,13 @@ for my $pattern (qw(rectilinear honeycomb hilbertcurve concentric)) {
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('skirts', 0);
     $config->set('perimeters', 3);
     $config->set('fill_density', 0);
     $config->set('layer_height', 0.2);
     $config->set('first_layer_height', 0.2);
-    $config->set('nozzle_diameter', [0.35]);
+    $config->set('nozzle_diameter', [0.35,0.35,0.35,0.35]);
     $config->set('infill_extruder', 2);
     $config->set('solid_infill_extruder', 2);
     $config->set('infill_extrusion_width', 0.52);

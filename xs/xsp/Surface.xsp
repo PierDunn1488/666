@@ -84,13 +84,16 @@ Surface::polygons()
         RETVAL
 
 Surfaces
-Surface::offset(delta, scale = CLIPPER_OFFSET_SCALE, joinType = ClipperLib::jtMiter, miterLimit = 3)
+Surface::offset(delta, joinType = ClipperLib::jtMiter, miterLimit = 3)
     const float             delta
-    double                  scale
     ClipperLib::JoinType    joinType
     double                  miterLimit
     CODE:
+<<<<<<< HEAD
         RETVAL = offset(*THIS, delta, scale, joinType, miterLimit);
+=======
+        surfaces_append(RETVAL, offset_ex(THIS->expolygon, delta, joinType, miterLimit), *THIS);
+>>>>>>> origin/merill-merge
     OUTPUT:
         RETVAL
 
@@ -106,9 +109,16 @@ _constant()
     S_TYPE_TOP              = stTop
     S_TYPE_BOTTOM           = stBottom
     S_TYPE_INTERNAL         = stInternal
+<<<<<<< HEAD
     S_TYPE_SOLID            = stSolid
     S_TYPE_BRIDGE           = stBridge
     S_TYPE_VOID             = stVoid
+=======
+    S_TYPE_INTERNALSOLID    = stInternalSolid
+    S_TYPE_INTERNALBRIDGE   = stInternalBridge
+    S_TYPE_INTERNALVOID     = stInternalVoid
+    S_TYPW_PERIMETER        = stPerimeter
+>>>>>>> origin/merill-merge
   PROTOTYPE:
   CODE:
     RETVAL = ix;

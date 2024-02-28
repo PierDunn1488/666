@@ -4,7 +4,16 @@
 #include <xsinit.h>
 #include "libslic3r/IO.hpp"
 #include "libslic3r/Model.hpp"
+#include "libslic3r/ModelArrange.hpp"
+#include "libslic3r/Print.hpp"
 #include "libslic3r/PrintConfig.hpp"
+#include "libslic3r/Slicing.hpp"
+#include "libslic3r/Format/AMF.hpp"
+#include "libslic3r/Format/3mf.hpp"
+#include "libslic3r/Format/OBJ.hpp"
+#include "libslic3r/Format/PRUS.hpp"
+#include "libslic3r/Format/STL.hpp"
+#include "libslic3r/PresetBundle.hpp"
 %}
 
 %name{Slic3r::Model} class Model {
@@ -15,6 +24,15 @@
         %code%{
             try {
                 RETVAL = new Model(Model::read_from_file(input_file));
+            } catch (std::exception& e) {
+                croak("Error while opening %s: %s\n", input_file.c_str(), e.what());
+            }
+        %};
+
+    %name{read_from_file} Model(std::string input_file, bool add_default_instances = true)
+        %code%{
+            try {
+                RETVAL = new Model(Model::read_from_file(input_file, nullptr, nullptr, only_if(add_default_instances, Model::LoadAttribute::AddDefaultInstances)));
             } catch (std::exception& e) {
                 croak("Error while opening %s: %s\n", input_file.c_str(), e.what());
             }
@@ -43,7 +61,7 @@
 
     %name{_add_object} Ref<ModelObject> add_object();
     Ref<ModelObject> _add_object_clone(ModelObject* other, bool copy_volumes = true)
-        %code%{ RETVAL = THIS->add_object(*other, copy_volumes); %};
+        %code%{ auto ptr = THIS->add_object(*other); if (! copy_volumes) ptr->clear_volumes(); RETVAL = ptr; %};
     void delete_object(size_t idx);
     void clear_objects();
     size_t objects_count()
@@ -81,22 +99,24 @@
     size_t material_count() const
         %code%{ RETVAL = THIS->materials.size(); %};
 
+<<<<<<< HEAD
     size_t metadata_count() const
         %code%{ RETVAL = THIS->metadata.size(); %};
 
     bool has_objects_with_no_instances();
+=======
+>>>>>>> origin/merill-merge
     bool add_default_instances();
     Clone<BoundingBoxf3> bounding_box();
-    void center_instances_around_point(Pointf* point)
+    void center_instances_around_point(Vec2d* point)
         %code%{ THIS->center_instances_around_point(*point); %};
-    void align_instances_to_origin();
     void translate(double x, double y, double z);
     Clone<TriangleMesh> mesh();
-    Clone<TriangleMesh> raw_mesh();
 
     ModelObjectPtrs* objects()
         %code%{ RETVAL = &THIS->objects; %};
     
+<<<<<<< HEAD
     bool arrange_objects(double dist, BoundingBoxf* bb = NULL);
     void duplicate(unsigned int copies_num, double dist, BoundingBoxf* bb = NULL);
     void duplicate_objects(unsigned int copies_num, double dist, BoundingBoxf* bb = NULL);
@@ -106,14 +126,46 @@
     void convert_multipart_object();
     void repair();
 };
+=======
+    bool arrange_objects(double dist, BoundingBoxf* bb = NULL) %code%{ ArrangeParams ap{scaled(dist)}; if (bb) arrange_objects(*THIS, scaled(*bb), ap); else arrange_objects(*THIS, InfiniteBed{}, ap); %};
+    void duplicate(unsigned int copies_num, double dist, BoundingBoxf* bb = NULL) %code%{ ArrangeParams ap{scaled(dist)}; if (bb) duplicate(*THIS, copies_num, scaled(*bb), ap); else duplicate(*THIS, copies_num, InfiniteBed{}, ap); %};
+    void duplicate_objects(unsigned int copies_num, double dist, BoundingBoxf* bb = NULL) %code%{ ArrangeParams ap{scaled(dist)}; if (bb) duplicate_objects(*THIS, copies_num, scaled(*bb), ap); else duplicate_objects(*THIS, copies_num, InfiniteBed{}, ap); %};
+    void duplicate_objects_grid(unsigned int x, unsigned int y, double dist);
+>>>>>>> origin/merill-merge
 
+    bool looks_like_multipart_object() const;
+    void convert_multipart_object(unsigned int max_extruders);
+
+    void print_info() const;
+
+    bool store_stl(char *path, bool binary)
+        %code%{ TriangleMesh mesh = THIS->mesh(); RETVAL = Slic3r::store_stl(path, &mesh, binary); %};
+
+%{
+
+Model*
+load_stl(CLASS, path, object_name)
+    char*           CLASS;
+    char*           path;
+    char*           object_name;
+    CODE:
+        RETVAL = new Model();
+        if (! load_stl(path, RETVAL, object_name)) {
+            delete RETVAL;
+            RETVAL = NULL;
+        }
+    OUTPUT:
+        RETVAL
+
+%}
+};
 
 %name{Slic3r::Model::Material} class ModelMaterial {
     Ref<Model> model()
         %code%{ RETVAL = THIS->get_model(); %};
 
     Ref<DynamicPrintConfig> config()
-        %code%{ RETVAL = &THIS->config; %};
+        %code%{ RETVAL = &const_cast<DynamicPrintConfig&>(THIS->config.get()); %};
     
     std::string get_attribute(std::string name)
         %code%{ if (THIS->attributes.find(name) != THIS->attributes.end()) RETVAL = THIS->attributes[name]; %};
@@ -146,25 +198,10 @@ ModelMaterial::attributes()
         %code%{ RETVAL = &THIS->instances; %};
     
     void invalidate_bounding_box();
-    void update_bounding_box();
     Clone<TriangleMesh> mesh();
     Clone<TriangleMesh> raw_mesh();
-    Clone<BoundingBoxf3> raw_bounding_box();
-    Clone<BoundingBoxf3> instance_bounding_box(int idx);
-
-    Ref<BoundingBoxf3> _bounding_box(BoundingBoxf3* new_bbox = NULL)
-        %code{%
-            if (NULL != new_bbox) {
-                THIS->_bounding_box = *new_bbox;
-                THIS->_bounding_box_valid = true;
-            }
-            
-            if (!THIS->_bounding_box_valid) {
-                XSRETURN_UNDEF;
-            }
-
-            RETVAL = &THIS->_bounding_box;
-        %};
+    Clone<BoundingBoxf3> instance_bounding_box(int idx)
+        %code%{ RETVAL = THIS->instance_bounding_box(idx, true); %};
     Clone<BoundingBoxf3> bounding_box();
 
     %name{_add_volume} Ref<ModelVolume> add_volume(TriangleMesh* mesh)
@@ -178,6 +215,25 @@ ModelMaterial::attributes()
         %code%{ RETVAL = THIS->volumes.size(); %};
     Ref<ModelVolume> get_volume(int idx)
         %code%{ RETVAL = THIS->volumes.at(idx); %};
+<<<<<<< HEAD
+=======
+    bool move_volume_up(int idx)
+        %code%{ 
+            if (idx > 0 && idx < int(THIS->volumes.size())) {
+                std::swap(THIS->volumes[idx-1], THIS->volumes[idx]);
+                RETVAL = true;
+            } else
+                RETVAL = false;
+        %};
+    bool move_volume_down(int idx)
+        %code%{ 
+            if (idx >= 0 && idx + 1 < int(THIS->volumes.size())) {
+                std::swap(THIS->volumes[idx+1], THIS->volumes[idx]);
+                RETVAL = true;
+            } else
+                RETVAL = false;
+        %};
+>>>>>>> origin/merill-merge
 
     %name{_add_instance} Ref<ModelInstance> add_instance();
     Ref<ModelInstance> _add_instance_clone(ModelInstance* other)
@@ -198,13 +254,18 @@ ModelMaterial::attributes()
     void set_input_file(std::string value)
         %code%{ THIS->input_file = value; %};
     Ref<DynamicPrintConfig> config()
+<<<<<<< HEAD
         %code%{ RETVAL = &THIS->config; %};
     int part_number()
         %code%{ RETVAL = THIS->part_number; %};
+=======
+        %code%{ RETVAL = &const_cast<DynamicPrintConfig&>(THIS->config.get()); %};
+>>>>>>> origin/merill-merge
 
     Ref<Model> model()
         %code%{ RETVAL = THIS->get_model(); %};
 
+<<<<<<< HEAD
     t_layer_height_ranges layer_height_ranges()
         %code%{ RETVAL = THIS->layer_height_ranges; %};
     void set_layer_height_ranges(t_layer_height_ranges ranges)
@@ -223,15 +284,23 @@ ModelMaterial::attributes()
 
     void set_trafo_obj(TransformationMatrix* trafo)
         %code%{ THIS->set_trafo_obj(*trafo); %};
+=======
+    Ref<Vec3d> origin_translation()
+        %code%{ RETVAL = &THIS->origin_translation; %};
+    void set_origin_translation(Vec3d* point)
+        %code%{ THIS->origin_translation = *point; %};
+>>>>>>> origin/merill-merge
     
+    void ensure_on_bed();
     bool needed_repair() const;
     int materials_count() const;
     int facets_count();
     void align_to_ground();
     void center_around_origin();
     void translate(double x, double y, double z);
-    void scale_xyz(Pointf3* versor)
+    void scale_xyz(Vec3d* versor)
         %code{% THIS->scale(*versor); %};
+<<<<<<< HEAD
     void rotate(double angle, Axis axis);
     void rotate_vec_to_vec(Pointf3* origin, Pointf3* target)
         %code{% THIS->rotate(*origin, *target); %};
@@ -251,15 +320,25 @@ ModelMaterial::attributes()
             RETVAL = new Model();
             THIS->cut(axis, z, RETVAL);
         %};
+=======
+    void rotate(float angle, Vec3d* axis)
+        %code{% THIS->rotate(angle, *axis); %};
+    void mirror(Axis axis);
+>>>>>>> origin/merill-merge
 
     ModelObjectPtrs* split_object()
         %code%{
             RETVAL = new ModelObjectPtrs();  // leak?
             THIS->split(RETVAL);
         %};
+<<<<<<< HEAD
     
     void print_info();
     void repair();
+=======
+
+    void print_info() const;
+>>>>>>> origin/merill-merge
 };
 
 
@@ -290,7 +369,7 @@ ModelMaterial::attributes()
 
     t_model_material_id material_id();
     void set_material_id(t_model_material_id material_id)
-        %code%{ THIS->material_id(material_id); %};
+        %code%{ THIS->set_material_id(material_id); %};
     Ref<ModelMaterial> material();
 
     Clone<BoundingBoxf3> bounding_box()
@@ -311,8 +390,9 @@ ModelMaterial::attributes()
         %code{% THIS->apply_transformation(*trafo); %};
 
     Ref<DynamicPrintConfig> config()
-        %code%{ RETVAL = &THIS->config; %};
+        %code%{ RETVAL = &const_cast<DynamicPrintConfig&>(THIS->config.get()); %};
     Ref<TriangleMesh> mesh()
+<<<<<<< HEAD
         %code%{ RETVAL = &THIS->mesh; %};
 
     Clone<TriangleMesh> get_transformed_mesh(ModelInstance * instance)
@@ -321,9 +401,14 @@ ModelMaterial::attributes()
             RETVAL = THIS->get_transformed_mesh(trafo);
         %};
 
+=======
+        %code%{ RETVAL = &THIS->mesh(); %};
+    
+>>>>>>> origin/merill-merge
     bool modifier()
-        %code%{ RETVAL = THIS->modifier; %};
+        %code%{ RETVAL = THIS->is_modifier(); %};
     void set_modifier(bool modifier)
+<<<<<<< HEAD
         %code%{ THIS->modifier = modifier; %};
     
     ModelMaterial* assign_unique_material();
@@ -336,6 +421,21 @@ ModelMaterial::attributes()
                 croak("%s", e.what());
             }
         %};
+=======
+        %code%{ THIS->set_type(modifier ? ModelVolumeType::PARAMETER_MODIFIER : ModelVolumeType::MODEL_PART); %};
+    bool model_part()
+        %code%{ RETVAL = THIS->is_model_part(); %};
+    bool support_enforcer()
+        %code%{ RETVAL = THIS->is_support_enforcer(); %};
+    void set_support_enforcer()
+        %code%{ THIS->set_type(ModelVolumeType::SUPPORT_ENFORCER); %};
+    bool support_blocker()
+        %code%{ RETVAL = THIS->is_support_blocker(); %};
+    void set_support_blocker()
+        %code%{ THIS->set_type(ModelVolumeType::SUPPORT_BLOCKER); %};
+
+    size_t split(unsigned int max_extruders);
+>>>>>>> origin/merill-merge
 };
 
 
@@ -343,6 +443,7 @@ ModelMaterial::attributes()
     Ref<ModelObject> object()
         %code%{ RETVAL = THIS->get_object(); %};
 
+<<<<<<< HEAD
     double rotation()
         %code%{ RETVAL = THIS->rotation; %};
     double scaling_factor()
@@ -352,13 +453,43 @@ ModelMaterial::attributes()
     Ref<TransformationMatrix> additional_trafo()
         %code%{ RETVAL = &THIS->additional_trafo; %};
 
+=======
+    Vec3d* rotation()
+        %code%{ RETVAL = new Vec3d(THIS->get_rotation(X), THIS->get_rotation(Y), THIS->get_rotation(Z)); %};
+        
+    Vec3d* scaling_factor()
+        %code%{ RETVAL = new Vec3d(THIS->get_scaling_factor(X), THIS->get_scaling_factor(Y), THIS->get_scaling_factor(Z)); %};
+        
+    Vec2d* offset()
+        %code%{ RETVAL = new Vec2d(THIS->get_offset(X), THIS->get_offset(Y)); %};
+        
+>>>>>>> origin/merill-merge
     void set_rotation(double val)
-        %code%{ THIS->rotation = val; %};
+        %code%{ THIS->set_rotation(Z, val); THIS->get_object()->invalidate_bounding_box(); %};
+        
+    void set_rotations(Vec3d *rotation)
+        %code%{ THIS->set_rotation(*rotation); THIS->get_object()->invalidate_bounding_box(); %};
+        
     void set_scaling_factor(double val)
+<<<<<<< HEAD
         %code%{ THIS->scaling_factor = val; %};
     void set_offset(Pointf *offset)
         %code%{ THIS->offset = *offset; %};
 
     void transform_mesh(TriangleMesh* mesh, bool dont_translate) const;
+=======
+        %code%{ THIS->set_scaling_factor(X, val); THIS->set_scaling_factor(Y, val); THIS->set_scaling_factor(Z, val); THIS->get_object()->invalidate_bounding_box(); %};
+        
+    void set_scaling_factors(Vec3d *scale)
+        %code%{ THIS->set_scaling_factor(*scale); THIS->get_object()->invalidate_bounding_box(); %};
+        
+    void set_offset(Vec2d *offset)
+        %code%{ 
+            THIS->set_offset(X, (*offset)(0));
+            THIS->set_offset(Y, (*offset)(1));
+        %};
+
+    void transform_mesh(TriangleMesh* mesh, bool dont_translate = false) const;
+>>>>>>> origin/merill-merge
     void transform_polygon(Polygon* polygon) const;
 };

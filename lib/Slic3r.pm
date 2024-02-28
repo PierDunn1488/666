@@ -1,5 +1,8 @@
 # This package loads all the non-GUI Slic3r perl packages.
+<<<<<<< HEAD
 # In addition, it implements utility functions for file handling and threading.
+=======
+>>>>>>> origin/merill-merge
 
 package Slic3r;
 
@@ -8,19 +11,26 @@ package Slic3r;
 
 use strict;
 use warnings;
+use Config;
 require v5.10;
 
 our $VERSION = VERSION();
+<<<<<<< HEAD
 our $GITVERSION = GITVERSION();
+=======
+our $BUILD = BUILD();
+our $FORK_NAME = FORK_NAME();
+>>>>>>> origin/merill-merge
 
 our $debug = 0;
 sub debugf {
     printf @_ if $debug;
 }
 
-# load threads before Moo as required by it
-our $have_threads;
+our $loglevel = 0;
+
 BEGIN {
+<<<<<<< HEAD
     # Test, whether the perl was compiled with ithreads support and ithreads actually work.
     use Config;
     $have_threads = $Config{useithreads} && eval "use threads; use threads::shared; use Thread::Queue; 1";
@@ -48,6 +58,18 @@ if ($^O eq 'darwin' && !-d $varpath) {
     $varpath = decode_path($FindBin::Bin) . "/../Resources/var";
 }
 our $var = sub { "$varpath/$_[0]" };
+=======
+    $debug = 1 if (defined($ENV{'SLIC3R_DEBUGOUT'}) && $ENV{'SLIC3R_DEBUGOUT'} == 1);
+    print "Debugging output enabled\n" if $debug;
+}
+
+use FindBin;
+
+# Let the XS module know where the GUI resources reside.
+set_resources_dir(decode_path($FindBin::Bin) . (($^O eq 'darwin') ? '/../Resources' : '/resources'));
+set_var_dir(resources_dir() . "/icons");
+set_local_dir(resources_dir() . "/localization/");
+>>>>>>> origin/merill-merge
 
 use Moo 1.003001;
 
@@ -57,12 +79,16 @@ use Slic3r::ExPolygon;
 use Slic3r::ExtrusionLoop;
 use Slic3r::ExtrusionPath;
 use Slic3r::Flow;
+<<<<<<< HEAD
 use Slic3r::GCode::ArcFitting;
 use Slic3r::GCode::MotionPlanner;
 use Slic3r::GCode::PressureRegulator;
 use Slic3r::GCode::Reader;
 use Slic3r::GCode::VibrationLimit;
 use Slic3r::Geometry qw(PI);
+=======
+use Slic3r::GCode::Reader;
+>>>>>>> origin/merill-merge
 use Slic3r::Geometry::Clipper;
 use Slic3r::Layer;
 use Slic3r::Line;
@@ -70,21 +96,14 @@ use Slic3r::Model;
 use Slic3r::Point;
 use Slic3r::Polygon;
 use Slic3r::Polyline;
-use Slic3r::Print;
-use Slic3r::Print::GCode;
 use Slic3r::Print::Object;
-use Slic3r::Print::Simple;
-use Slic3r::Print::SupportMaterial;
 use Slic3r::Surface;
 our $build = eval "use Slic3r::Build; 1";
-use Thread::Semaphore;
-use Encode::Locale 1.05;
-use Encode;
-use Unicode::Normalize;
 
 # Scaling between the float and integer coordinates.
 # Floats are in mm.
 use constant SCALING_FACTOR         => 0.000001;
+<<<<<<< HEAD
 # Resolution to simplify perimeters to. These constants are now used in C++ code only. Better to publish them to Perl from the C++ code.
 # use constant RESOLUTION             => 0.0125;
 # use constant SCALED_RESOLUTION      => RESOLUTION / SCALING_FACTOR;
@@ -328,6 +347,16 @@ sub decode_path {
     
     return $path;
 }
+=======
+
+# Set the logging level at the Slic3r XS module.
+$Slic3r::loglevel = (defined($ENV{'SLIC3R_LOGLEVEL'}) && $ENV{'SLIC3R_LOGLEVEL'} =~ /^[1-9]/) ? $ENV{'SLIC3R_LOGLEVEL'} : 0;
+set_logging_level($Slic3r::loglevel);
+
+# Let the palceholder parser evaluate one expression to initialize its local static macro_processor 
+# class instance in a thread safe manner.
+Slic3r::GCode::PlaceholderParser->new->evaluate_boolean_expression('1==1');
+>>>>>>> origin/merill-merge
 
 # Open a file by converting $filename to local file system locales.
 sub open {
@@ -335,8 +364,73 @@ sub open {
     return CORE::open $$fh, $mode, encode_path($filename);
 }
 
-# this package declaration prevents an ugly fatal warning to be emitted when
-# spawning a new thread
-package GLUquadricObjPtr;
+sub tags {
+    my ($format) = @_;
+    $format //= '';
+    my %tags;
+    # End of line
+    $tags{eol}     = ($format eq 'html') ? '<br>'   : "\n";
+    # Heading
+    $tags{h2start} = ($format eq 'html') ? '<b>'   : '';
+    $tags{h2end}   = ($format eq 'html') ? '</b>'  : '';
+    # Bold font
+    $tags{bstart}  = ($format eq 'html') ? '<b>'    : '';
+    $tags{bend}    = ($format eq 'html') ? '</b>'   : '';
+    # Verbatim
+    $tags{vstart}  = ($format eq 'html') ? '<pre>'  : '';
+    $tags{vend}    = ($format eq 'html') ? '</pre>' : '';
+    return %tags;
+}
+
+sub slic3r_info
+{
+    my (%params) = @_;
+    my %tag = Slic3r::tags($params{format});
+    my $out = '';
+    $out .= "$tag{bstart}$Slic3r::FORK_NAME$tag{bend}$tag{eol}";
+    $out .= "$tag{bstart}Version: $tag{bend}$Slic3r::VERSION$tag{eol}";
+    $out .= "$tag{bstart}Build:   $tag{bend}$Slic3r::BUILD$tag{eol}";
+    return $out;
+}
+
+sub copyright_info
+{
+    my (%params) = @_;
+    my %tag = Slic3r::tags($params{format});
+    my $out =
+        'Copyright &copy; 2018 Durand Rémi. <br />' .
+        'Copyright &copy; 2016 Vojtech Bubnik, Prusa Research. <br />' .
+        'Copyright &copy; 2011-2016 Alessandro Ranellucci. <br />' .
+        '<a href="http://slic3r.org/">Slic3r</a> is licensed under the ' .
+        '<a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License, version 3</a>.' .
+        '<br /><br /><br />' .
+        'Contributions by Henrik Brix Andersen, Nicolas Dandrimont, Mark Hindess, Petr Ledvina, Y. Sapir, Mike Sheldrake, Durand Rémi and numerous others. ' .
+        'Manual by Gary Hodgson. Inspired by the RepRap community. <br />' .
+        'Slic3r logo designed by Corey Daniels, <a href="http://www.famfamfam.com/lab/icons/silk/">Silk Icon Set</a> designed by Mark James. ';
+    return $out;
+}
+
+sub system_info
+{
+    my (%params) = @_;
+    my %tag = Slic3r::tags($params{format});
+
+    my $out = '';
+    $out .= "$tag{bstart}Operating System:    $tag{bend}$Config{osname}$tag{eol}";
+    $out .= "$tag{bstart}System Architecture: $tag{bend}$Config{archname}$tag{eol}";        
+    if ($^O eq 'MSWin32') {
+        $out .= "$tag{bstart}Windows Version: $tag{bend}" . `ver` . $tag{eol};
+    } else {
+        # Hopefully some kind of unix / linux.
+        $out .= "$tag{bstart}System Version: $tag{bend}" . `uname -a` . $tag{eol};
+    }
+    $out .= $tag{vstart} . Config::myconfig . $tag{vend};
+    $out .= "  $tag{bstart}\@INC:$tag{bend}$tag{eol}$tag{vstart}";
+    foreach my $i (@INC) {
+        $out .= "    $i\n";
+    }
+    $out .= "$tag{vend}";
+    return $out;
+}
 
 1;

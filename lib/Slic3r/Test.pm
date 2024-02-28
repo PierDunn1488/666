@@ -1,12 +1,12 @@
 package Slic3r::Test;
 use strict;
 use warnings;
+use Cwd 'abs_path';
 
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(_eq);
 
-use IO::Scalar;
 use List::Util qw(first);
 use Slic3r::Geometry qw(epsilon X Y Z);
 
@@ -178,50 +178,66 @@ sub mesh {
 }
 
 sub model {
-    my ($model_name, %params) = @_;
-    
+    my ($model_names, %params) = @_;
+    $model_names = [ $model_names ] if ! ref($model_names);
+
     my $model = Slic3r::Model->new;
-    my $object = $model->add_object(input_file => "${model_name}.stl");
-    $model->set_material($model_name);
-    $object->add_volume(mesh => mesh($model_name, %params), material_id => $model_name);
-    $object->add_instance(
-        offset          => Slic3r::Pointf->new(0,0),
-        rotation        => $params{rotation} // 0,
-        scaling_factor  => $params{scale} // 1,
-    );
+
+    for my $model_name (@$model_names) {
+        my $input_file = "${model_name}.stl";
+        my $mesh = mesh($model_name, %params);
+    #    $mesh->write_ascii("out/$input_file");
+        
+        my $object = $model->add_object(input_file => $input_file);
+        $model->set_material($model_name);
+        $object->add_volume(mesh => $mesh, material_id => $model_name);
+        $object->add_instance(
+            offset          => Slic3r::Pointf->new(0,0),
+            # 3D full transform
+            rotation        => Slic3r::Pointf3->new(0, 0, $params{rotation} // 0),
+            scaling_factor  => Slic3r::Pointf3->new($params{scale} // 1, $params{scale} // 1, $params{scale} // 1),
+            # old transform
+    #        rotation        => $params{rotation} // 0,
+    #        scaling_factor  => $params{scale} // 1,
+        );
+    }
     return $model;
 }
 
 sub init_print {
     my ($models, %params) = @_;
+    my $model;
+    if (ref($models) eq 'ARRAY') {
+        $model = model($models, %params);
+    } elsif (ref($models)) {
+        $model = $models;
+    } else {
+        $model = model([$models], %params);
+    }
     
     my $config = Slic3r::Config->new;
     $config->apply($params{config}) if $params{config};
     $config->set('gcode_comments', 1) if $ENV{SLIC3R_TESTS_GCODE};
     
     my $print = Slic3r::Print->new;
-    $print->apply_config($config);
-    
-    $models = [$models] if ref($models) ne 'ARRAY';
-    $models = [ map { ref($_) ? $_ : model($_, %params) } @$models ];
-    for my $model (@$models) {
-        die "Unknown model in test" if !defined $model;
-        if (defined $params{duplicate} && $params{duplicate} > 1) {
-            $model->duplicate($params{duplicate} // 1, $print->config->min_object_distance);
-        }
-        $model->arrange_objects($print->config->min_object_distance);
-        $model->center_instances_around_point($params{print_center} ? Slic3r::Pointf->new(@{$params{print_center}}) : Slic3r::Pointf->new(100,100));
-        foreach my $model_object (@{$model->objects}) {
-            $print->auto_assign_extruders($model_object);
-            $print->add_model_object($model_object);
-        }
+    die "Unknown model in test" if !defined $model;
+    if (defined $params{duplicate} && $params{duplicate} > 1) {
+        $model->duplicate($params{duplicate} // 1, $config->min_object_distance);
     }
+    $model->arrange_objects($config->min_object_distance);
+    $model->center_instances_around_point($params{print_center} ? Slic3r::Pointf->new(@{$params{print_center}}) : Slic3r::Pointf->new(100,100));
+    foreach my $model_object (@{$model->objects}) {
+        $model_object->ensure_on_bed;
+        $print->auto_assign_extruders($model_object);
+    }
+
+    $print->apply($model, $config);
     $print->validate;
     
     # We return a proxy object in order to keep $models alive as required by the Print API.
     return Slic3r::Test::Print->new(
-        print   => $print,
-        models  => $models,
+        print  => $print,
+        model  => $model,
     );
 }
 
@@ -230,10 +246,22 @@ sub gcode {
     
     $print = $print->print if $print->isa('Slic3r::Test::Print');
     
-    my $fh = IO::Scalar->new(\my $gcode);
+    # Write the resulting G-code into a temporary file.
+    my $gcode_temp_path = abs_path($0) . '.gcode.temp';
+    # Remove the existing temp file.
+    unlink $gcode_temp_path;
+    $print->set_status_silent;
     $print->process;
-    $print->export_gcode(output_fh => $fh, quiet => 1);
-    $fh->close;
+    $print->export_gcode($gcode_temp_path);
+    # Read the temoprary G-code file.
+    my $gcode;
+    {
+        local $/;
+        open my $fh, '<', $gcode_temp_path or die "Test.pm: can't open $gcode_temp_path: $!";
+        $gcode = <$fh>;
+    }
+    # Remove the temp file.
+    unlink $gcode_temp_path;
     
     return $gcode;
 }
@@ -260,7 +288,7 @@ sub add_facet {
 package Slic3r::Test::Print;
 use Moo;
 
-has 'print'     => (is => 'ro', required => 1, handles => [qw(process apply_config)]);
-has 'models'    => (is => 'ro', required => 1);
+has 'print'     => (is => 'ro', required => 1, handles => [qw(process apply)]);
+has 'model'     => (is => 'ro', required => 1);
 
 1;

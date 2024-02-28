@@ -2,6 +2,7 @@ coord_t  T_IV
 coordf_t T_NV
 
 std::string                     T_STD_STRING
+local_encoded_string     		T_STD_STRING_LOCAL_ENCODING
 t_config_option_key             T_STD_STRING
 t_model_material_id             T_STD_STRING
 
@@ -32,6 +33,7 @@ Clone<BoundingBoxf3>       O_OBJECT_SLIC3R_T
 
 DynamicPrintConfig*        O_OBJECT_SLIC3R
 Ref<DynamicPrintConfig>    O_OBJECT_SLIC3R_T
+Clone<DynamicPrintConfig>  O_OBJECT_SLIC3R_T
 
 StaticPrintConfig*         O_OBJECT_SLIC3R
 Ref<StaticPrintConfig>     O_OBJECT_SLIC3R_T
@@ -73,13 +75,13 @@ Point3*                    O_OBJECT_SLIC3R
 Ref<Point3>                O_OBJECT_SLIC3R_T
 Clone<Point3>              O_OBJECT_SLIC3R_T
 
-Pointf*                    O_OBJECT_SLIC3R
-Ref<Pointf>                O_OBJECT_SLIC3R_T
-Clone<Pointf>              O_OBJECT_SLIC3R_T
+Vec2d*                     O_OBJECT_SLIC3R
+Ref<Vec2d>                 O_OBJECT_SLIC3R_T
+Clone<Vec2d>               O_OBJECT_SLIC3R_T
 
-Pointf3*                   O_OBJECT_SLIC3R
-Ref<Pointf3>               O_OBJECT_SLIC3R_T
-Clone<Pointf3>             O_OBJECT_SLIC3R_T
+Vec3d*                     O_OBJECT_SLIC3R
+Ref<Vec3d>                 O_OBJECT_SLIC3R_T
+Clone<Vec3d>               O_OBJECT_SLIC3R_T
 
 Line*                      O_OBJECT_SLIC3R
 Ref<Line>                  O_OBJECT_SLIC3R_T
@@ -113,6 +115,10 @@ ExtrusionEntityCollection*              O_OBJECT_SLIC3R
 Ref<ExtrusionEntityCollection>          O_OBJECT_SLIC3R_T
 Clone<ExtrusionEntityCollection>        O_OBJECT_SLIC3R_T
 
+ExtrusionMultiPath*        O_OBJECT_SLIC3R
+Ref<ExtrusionMultiPath>    O_OBJECT_SLIC3R_T
+Clone<ExtrusionMultiPath>  O_OBJECT_SLIC3R_T
+
 ExtrusionPath*             O_OBJECT_SLIC3R
 Ref<ExtrusionPath>         O_OBJECT_SLIC3R_T
 Clone<ExtrusionPath>       O_OBJECT_SLIC3R_T
@@ -121,6 +127,13 @@ ExtrusionLoop*             O_OBJECT_SLIC3R
 Ref<ExtrusionLoop>         O_OBJECT_SLIC3R_T
 Clone<ExtrusionLoop>       O_OBJECT_SLIC3R_T
 
+<<<<<<< HEAD
+=======
+ExtrusionSimulator*        O_OBJECT_SLIC3R
+Ref<ExtrusionSimulator>    O_OBJECT_SLIC3R_T
+Clone<ExtrusionSimulator>  O_OBJECT_SLIC3R_T
+
+>>>>>>> origin/merill-merge
 Filler*                    O_OBJECT_SLIC3R
 Ref<Filler>                O_OBJECT_SLIC3R_T
 Clone<Filler>              O_OBJECT_SLIC3R_T
@@ -138,10 +151,6 @@ Clone<Surface>             O_OBJECT_SLIC3R_T
 
 SurfaceCollection*         O_OBJECT_SLIC3R
 Ref<SurfaceCollection>     O_OBJECT_SLIC3R_T
-
-Extruder*                  O_OBJECT_SLIC3R
-Ref<Extruder>              O_OBJECT_SLIC3R_T
-Clone<Extruder>            O_OBJECT_SLIC3R_T
 
 Model*                     O_OBJECT_SLIC3R
 Ref<Model>                 O_OBJECT_SLIC3R_T
@@ -194,17 +203,9 @@ PlaceholderParser*         O_OBJECT_SLIC3R
 Ref<PlaceholderParser>     O_OBJECT_SLIC3R_T
 Clone<PlaceholderParser>   O_OBJECT_SLIC3R_T
 
-AvoidCrossingPerimeters*         O_OBJECT_SLIC3R
-Ref<AvoidCrossingPerimeters>     O_OBJECT_SLIC3R_T
-Clone<AvoidCrossingPerimeters>   O_OBJECT_SLIC3R_T
-
-Wipe*         O_OBJECT_SLIC3R
-Ref<Wipe>     O_OBJECT_SLIC3R_T
-Clone<Wipe>   O_OBJECT_SLIC3R_T
-
-OozePrevention*             O_OBJECT_SLIC3R
-Ref<OozePrevention>         O_OBJECT_SLIC3R_T
-Clone<OozePrevention>       O_OBJECT_SLIC3R_T
+CoolingBuffer*             O_OBJECT_SLIC3R
+Ref<CoolingBuffer>         O_OBJECT_SLIC3R_T
+Clone<CoolingBuffer>       O_OBJECT_SLIC3R_T
 
 CoolingBuffer*             O_OBJECT_SLIC3R
 Ref<CoolingBuffer>         O_OBJECT_SLIC3R_T
@@ -218,6 +219,7 @@ GCode*                      O_OBJECT_SLIC3R
 Ref<GCode>                  O_OBJECT_SLIC3R_T
 Clone<GCode>                O_OBJECT_SLIC3R_T
 
+<<<<<<< HEAD
 MotionPlanner*             O_OBJECT_SLIC3R
 Ref<MotionPlanner>         O_OBJECT_SLIC3R_T
 Clone<MotionPlanner>       O_OBJECT_SLIC3R_T
@@ -234,6 +236,8 @@ GCodeWriter*               O_OBJECT_SLIC3R
 Ref<GCodeWriter>           O_OBJECT_SLIC3R_T
 Clone<GCodeWriter>         O_OBJECT_SLIC3R_T
 
+=======
+>>>>>>> origin/merill-merge
 BridgeDetector*            O_OBJECT_SLIC3R
 Ref<BridgeDetector>        O_OBJECT_SLIC3R_T
 Clone<BridgeDetector>      O_OBJECT_SLIC3R_T
@@ -242,11 +246,14 @@ PerimeterGenerator*         O_OBJECT_SLIC3R
 Ref<PerimeterGenerator>     O_OBJECT_SLIC3R_T
 Clone<PerimeterGenerator>   O_OBJECT_SLIC3R_T
 
-GLVertexArray*             O_OBJECT_SLIC3R
+PrintObjectSupportMaterial*       O_OBJECT_SLIC3R
+Ref<PrintObjectSupportMaterial>   O_OBJECT_SLIC3R_T
+Clone<PrintObjectSupportMaterial> O_OBJECT_SLIC3R_T
 
 Axis                  T_UV
 ExtrusionLoopRole     T_UV
 ExtrusionRole     T_UV
+ExtrusionSimulationType T_UV
 FlowRole     T_UV
 PrintStep     T_UV
 PrintObjectStep     T_UV
@@ -287,7 +294,21 @@ INPUT
 T_STD_STRING
     {
       size_t len;
+<<<<<<< HEAD
       const char * c = SvPVutf8($arg, len);
+=======
+      // const char * c = SvPV($arg, len);
+      // Always convert strings to UTF-8 before passing them to XS
+      const char * c = SvPVutf8($arg, len);
+      $var = std::string(c, len);
+    }
+
+INPUT
+T_STD_STRING_LOCAL_ENCODING
+    {
+      size_t len;
+      const char * c = SvPV($arg, len);
+>>>>>>> origin/merill-merge
       $var = std::string(c, len);
     }
 
@@ -449,6 +470,9 @@ OUTPUT
 
 T_STD_STRING
     $arg = newSVpvn_utf8( $var.c_str(), $var.length(), true );
+
+T_STD_STRING_LOCAL_ENCODING
+    $arg = newSVpvn( $var.c_str(), $var.length() );
 
 T_STD_VECTOR_STD_STRING
 	AV* av = newAV();

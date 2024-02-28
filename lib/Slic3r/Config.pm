@@ -12,17 +12,18 @@ use List::Util qw(first max);
 # The C++ counterpart is a constant singleton.
 our $Options = print_config_def();
 
-# overwrite the hard-coded readonly value (this information is not available in XS)
-$Options->{threads}{readonly} = !$Slic3r::have_threads;
-
-# generate accessors
+# Generate accessors.
 {
     no strict 'refs';
     for my $opt_key (keys %$Options) {
-        *{$opt_key} = sub { $_[0]->get($opt_key) };
+        *{$opt_key} = sub { 
+            #print "Slic3r::Config::accessor $opt_key\n"; 
+            $_[0]->get($opt_key)
+        };
     }
 }
 
+<<<<<<< HEAD
 # Fill in the underlying C++ Slic3r::DynamicPrintConfig with the content of the defaults
 # provided by the C++ class Slic3r::FullPrintConfig.
 sub new_from_defaults {
@@ -40,6 +41,9 @@ sub new_from_defaults {
 }
 
 # From command line parameters
+=======
+# From command line parameters, used by slic3r.pl
+>>>>>>> origin/merill-merge
 sub new_from_cli {
     my $class = shift;
     my %args = @_;
@@ -80,6 +84,7 @@ sub new_from_cli {
     return $self;
 }
 
+<<<<<<< HEAD
 sub merge {
     my $class = shift;
     my $config = $class->new;
@@ -370,6 +375,8 @@ sub read_ini {
     return $ini;
 }
 
+=======
+>>>>>>> origin/merill-merge
 package Slic3r::Config::Static;
 use parent 'Slic3r::Config';
 

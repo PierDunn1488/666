@@ -3,6 +3,7 @@
 %{
 #include <xsinit.h>
 #include "libslic3r/Layer.hpp"
+#include "libslic3r/ExPolygonCollection.hpp"
 %}
 
 %name{Slic3r::Layer::Region} class LayerRegion {
@@ -17,10 +18,6 @@
         %code%{ RETVAL = &THIS->thin_fills; %};
     Ref<SurfaceCollection> fill_surfaces()
         %code%{ RETVAL = &THIS->fill_surfaces; %};
-    Polygons bridged()
-        %code%{ RETVAL = THIS->bridged; %};
-    Ref<PolylineCollection> unsupported_bridge_edges()
-        %code%{ RETVAL = &THIS->unsupported_bridge_edges; %};
     Ref<ExtrusionEntityCollection> perimeters()
         %code%{ RETVAL = &THIS->perimeters; %};
     Ref<ExtrusionEntityCollection> fills()
@@ -28,11 +25,15 @@
     
     Clone<Flow> flow(FlowRole role, bool bridge = false, double width = -1)
         %code%{ RETVAL = THIS->flow(role, bridge, width); %};
-    void merge_slices();
     void prepare_fill_surfaces();
     void make_perimeters(SurfaceCollection* slices, SurfaceCollection* fill_surfaces)
         %code%{ THIS->make_perimeters(*slices, fill_surfaces); %};
     double infill_area_threshold();
+
+    void export_region_slices_to_svg(const char *path) const;
+    void export_region_fill_surfaces_to_svg(const char *path) const;
+    void export_region_slices_to_svg_debug(const char *name) const;
+    void export_region_fill_surfaces_to_svg_debug(const char *name) const;
 };
 
 %name{Slic3r::Layer} class Layer {
@@ -44,10 +45,6 @@
     int id();
     void set_id(int id);
     Ref<PrintObject> object();
-    Ref<Layer> upper_layer()
-        %code%{ RETVAL = THIS->upper_layer; %};
-    Ref<Layer> lower_layer()
-        %code%{ RETVAL = THIS->lower_layer; %};
     bool slicing_errors()
         %code%{ RETVAL = THIS->slicing_errors; %};
     coordf_t slice_z()
@@ -61,22 +58,13 @@
     void set_height(coordf_t h)
         %code%{ THIS->height = h; %};
 
-    void set_upper_layer(Layer *layer)
-        %code%{ THIS->upper_layer = layer; %};
-    void set_lower_layer(Layer *layer)
-        %code%{ THIS->lower_layer = layer; %};
-    bool has_upper_layer()
-        %code%{ RETVAL = (THIS->upper_layer != NULL); %};
-    bool has_lower_layer()
-        %code%{ RETVAL = (THIS->lower_layer != NULL); %};
-    
     size_t region_count();
     Ref<LayerRegion> get_region(int idx);
     Ref<LayerRegion> add_region(PrintRegion* print_region);
 
-    Ref<ExPolygonCollection> slices()
-        %code%{ RETVAL = &THIS->slices; %};
-    
+    ExPolygonCollection* slices()
+        %code%{ RETVAL = new ExPolygonCollection(THIS->lslices); %};
+
     int ptr()
         %code%{ RETVAL = (int)(intptr_t)THIS; %};
     
@@ -84,13 +72,18 @@
         %code%{ RETVAL = dynamic_cast<SupportLayer*>(THIS); %};
     
     void make_slices();
-    void merge_slices();
-    bool any_internal_region_slice_contains_polyline(Polyline* polyline)
-        %code%{ RETVAL = THIS->any_internal_region_slice_contains(*polyline); %};
-    bool any_bottom_region_slice_contains_polyline(Polyline* polyline)
-        %code%{ RETVAL = THIS->any_bottom_region_slice_contains(*polyline); %};
+    void backup_untyped_slices();
+    void restore_untyped_slices();
     void make_perimeters();
     void make_fills();
+<<<<<<< HEAD
+=======
+
+    void export_region_slices_to_svg(const char *path);
+    void export_region_fill_surfaces_to_svg(const char *path);
+    void export_region_slices_to_svg_debug(const char *name);
+    void export_region_fill_surfaces_to_svg_debug(const char *name);
+>>>>>>> origin/merill-merge
 };
 
 %name{Slic3r::Layer::Support} class SupportLayer {
@@ -103,19 +96,12 @@
         %code%{ RETVAL = &THIS->support_islands; %};
     Ref<ExtrusionEntityCollection> support_fills()
         %code%{ RETVAL = &THIS->support_fills; %};
-    Ref<ExtrusionEntityCollection> support_interface_fills()
-        %code%{ RETVAL = &THIS->support_interface_fills; %};
-
 
     // copies of some Layer methods, because the parameter wrapper code
     // gets confused about getting a Layer::Support instead of a Layer
     int id();
     void set_id(int id);
     Ref<PrintObject> object();
-    Ref<SupportLayer> upper_layer()
-        %code%{ RETVAL = (SupportLayer*)THIS->upper_layer; %};
-    Ref<SupportLayer> lower_layer()
-        %code%{ RETVAL = (SupportLayer*)THIS->lower_layer; %};
     bool slicing_errors()
         %code%{ RETVAL = THIS->slicing_errors; %};
     coordf_t slice_z()
@@ -125,24 +111,15 @@
     coordf_t height()
         %code%{ RETVAL = THIS->height; %};
 
-    void set_upper_layer(SupportLayer *layer)
-        %code%{ THIS->upper_layer = layer; %};
-    void set_lower_layer(SupportLayer *layer)
-        %code%{ THIS->lower_layer = layer; %};
-    bool has_upper_layer()
-        %code%{ RETVAL = (THIS->upper_layer != NULL); %};
-    bool has_lower_layer()
-        %code%{ RETVAL = (THIS->lower_layer != NULL); %};
-
     size_t region_count();
     Ref<LayerRegion> get_region(int idx);
     Ref<LayerRegion> add_region(PrintRegion* print_region);
 
-    Ref<ExPolygonCollection> slices()
-        %code%{ RETVAL = &THIS->slices; %};
+    ExPolygonCollection* slices()
+        %code%{ RETVAL = new ExPolygonCollection(THIS->lslices); %};
     
-    bool any_internal_region_slice_contains_polyline(Polyline* polyline)
-        %code%{ RETVAL = THIS->any_internal_region_slice_contains(*polyline); %};
-    bool any_bottom_region_slice_contains_polyline(Polyline* polyline)
-        %code%{ RETVAL = THIS->any_bottom_region_slice_contains(*polyline); %};
+    void export_region_slices_to_svg(const char *path);
+    void export_region_fill_surfaces_to_svg(const char *path);
+    void export_region_slices_to_svg_debug(const char *name);
+    void export_region_fill_surfaces_to_svg_debug(const char *name);
 };

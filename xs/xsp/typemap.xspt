@@ -23,12 +23,12 @@
 %typemap{Point3*};
 %typemap{Ref<Point3>}{simple};
 %typemap{Clone<Point3>}{simple};
-%typemap{Pointf*};
-%typemap{Ref<Pointf>}{simple};
-%typemap{Clone<Pointf>}{simple};
-%typemap{Pointf3*};
-%typemap{Ref<Pointf3>}{simple};
-%typemap{Clone<Pointf3>}{simple};
+%typemap{Vec2d*};
+%typemap{Ref<Vec2d>}{simple};
+%typemap{Clone<Vec2d>}{simple};
+%typemap{Vec3d*};
+%typemap{Ref<Vec3d>}{simple};
+%typemap{Clone<Vec3d>}{simple};
 %typemap{BoundingBox*};
 %typemap{Ref<BoundingBox>}{simple};
 %typemap{Clone<BoundingBox>}{simple};
@@ -40,6 +40,7 @@
 %typemap{Clone<BoundingBoxf3>}{simple};
 %typemap{DynamicPrintConfig*};
 %typemap{Ref<DynamicPrintConfig>}{simple};
+%typemap{Clone<DynamicPrintConfig>}{simple};
 %typemap{StaticPrintConfig*};
 %typemap{Ref<StaticPrintConfig>}{simple};
 %typemap{PrintObjectConfig*};
@@ -58,6 +59,9 @@
 %typemap{ExPolygonCollection*};
 %typemap{Ref<ExPolygonCollection>}{simple};
 %typemap{Clone<ExPolygonCollection>}{simple};
+%typemap{Filler*};
+%typemap{Ref<Filler>}{simple};
+%typemap{Clone<Filler>}{simple};
 %typemap{Flow*};
 %typemap{Ref<Flow>}{simple};
 %typemap{Clone<Flow>}{simple};
@@ -79,30 +83,30 @@
 %typemap{ExtrusionEntityCollection*};
 %typemap{Ref<ExtrusionEntityCollection>}{simple};
 %typemap{Clone<ExtrusionEntityCollection>}{simple};
+%typemap{ExtrusionMultiPath*};
+%typemap{Ref<ExtrusionMultiPath>}{simple};
+%typemap{Clone<ExtrusionMultiPath>}{simple};
 %typemap{ExtrusionPath*};
 %typemap{Ref<ExtrusionPath>}{simple};
 %typemap{Clone<ExtrusionPath>}{simple};
 %typemap{ExtrusionLoop*};
 %typemap{Ref<ExtrusionLoop>}{simple};
 %typemap{Clone<ExtrusionLoop>}{simple};
+<<<<<<< HEAD
 %typemap{TransformationMatrix*};
 %typemap{Ref<TransformationMatrix>}{simple};
 %typemap{Clone<TransformationMatrix>}{simple};
+=======
+%typemap{ExtrusionSimulator*};
+%typemap{Ref<ExtrusionSimulator>}{simple};
+%typemap{Clone<ExtrusionSimulator>}{simple};
+>>>>>>> origin/merill-merge
 %typemap{TriangleMesh*};
 %typemap{Ref<TriangleMesh>}{simple};
 %typemap{Clone<TriangleMesh>}{simple};
 %typemap{PolylineCollection*};
 %typemap{Ref<PolylineCollection>}{simple};
 %typemap{Clone<PolylineCollection>}{simple};
-%typemap{MotionPlanner*};
-%typemap{Ref<MotionPlanner>}{simple};
-%typemap{Clone<MotionPlanner>}{simple};
-%typemap{GCodeWriter*};
-%typemap{Ref<GCodeWriter>}{simple};
-%typemap{Clone<GCodeWriter>}{simple};
-%typemap{GCodeSender*};
-%typemap{Ref<GCodeSender>}{simple};
-%typemap{Clone<GCodeSender>}{simple};
 %typemap{BridgeDetector*};
 %typemap{Ref<BridgeDetector>}{simple};
 %typemap{Clone<BridgeDetector>}{simple};
@@ -147,21 +151,17 @@
 %typemap{SupportLayer*};
 %typemap{Ref<SupportLayer>}{simple};
 
+%typemap{PrintObjectSupportMaterial*};
+%typemap{Ref<PrintObjectSupportMaterial>}{simple};
+%typemap{Clone<PrintObjectSupportMaterial>}{simple};
+
 %typemap{PlaceholderParser*};
 %typemap{Ref<PlaceholderParser>}{simple};
 %typemap{Clone<PlaceholderParser>}{simple};
 
-%typemap{AvoidCrossingPerimeters*};
-%typemap{Ref<AvoidCrossingPerimeters>}{simple};
-%typemap{Clone<AvoidCrossingPerimeters>}{simple};
-
-%typemap{Wipe*};
-%typemap{Ref<Wipe>}{simple};
-%typemap{Clone<Wipe>}{simple};
-
-%typemap{OozePrevention*};
-%typemap{Ref<OozePrevention>}{simple};
-%typemap{Clone<OozePrevention>}{simple};
+%typemap{CoolingBuffer*};
+%typemap{Ref<CoolingBuffer>}{simple};
+%typemap{Clone<CoolingBuffer>}{simple};
 
 %typemap{CoolingBuffer*};
 %typemap{Ref<CoolingBuffer>}{simple};
@@ -171,6 +171,9 @@
 %typemap{Ref<GCode>}{simple};
 %typemap{Clone<GCode>}{simple};
 
+//%typemap{GCodePreviewData*};
+//%typemap{Ref<GCodePreviewData>}{simple};
+//%typemap{Clone<GCodePreviewData>}{simple};
 
 %typemap{Points};
 %typemap{Pointfs};
@@ -184,9 +187,6 @@
 %typemap{TransformationMatrix*};
 %typemap{TriangleMesh*};
 %typemap{TriangleMeshPtrs};
-%typemap{Extruder*};
-%typemap{Ref<Extruder>}{simple};
-%typemap{Clone<Extruder>}{simple};
 %typemap{Model*};
 %typemap{Ref<Model>}{simple};
 %typemap{Clone<Model>}{simple};
@@ -211,18 +211,26 @@
 %typemap{ModelInstancePtrs*};
 %typemap{Ref<ModelInstancePtrs>}{simple};
 %typemap{Clone<ModelInstancePtrs>}{simple};
+<<<<<<< HEAD
 %typemap{GLVertexArray*};
 %typemap{SLAPrint*};
 %typemap{Ref<SLAPrint>}{simple};
 %typemap{Clone<SLAPrint>}{simple};
+=======
+%typemap{PresetHints*};
+%typemap{Ref<PresetHints>}{simple};
+>>>>>>> origin/merill-merge
 
 %typemap{PrintRegionPtrs*};
 %typemap{PrintObjectPtrs*};
 %typemap{LayerPtrs*};
 %typemap{SupportLayerPtrs*};
 
+<<<<<<< HEAD
 %typemap{ClipperLib::JoinType}{simple};
 %typemap{ClipperLib::PolyFillType}{simple};
+=======
+>>>>>>> origin/merill-merge
 %typemap{Axis}{parsed}{
   %cpp_type{Axis};
   %precall_code{%
@@ -245,6 +253,12 @@
   %cpp_type{ExtrusionRole};
   %precall_code{%
     $CVar = (ExtrusionRole)SvUV($PerlVar);
+  %};
+};
+%typemap{ExtrusionSimulationType}{parsed}{
+  %cpp_type{ExtrusionSimulationType};
+  %precall_code{%
+    $CVar = (ExtrusionSimulationType)SvUV($PerlVar);
   %};
 };
 %typemap{FlowRole}{parsed}{

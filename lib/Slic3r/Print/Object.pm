@@ -6,23 +6,11 @@ use warnings;
 use POSIX;
 use List::Util qw(min max sum first any);
 use Slic3r::Flow ':roles';
-use Slic3r::Geometry qw(X Y Z PI scale unscale chained_path epsilon);
+use Slic3r::Geometry qw(scale epsilon);
 use Slic3r::Geometry::Clipper qw(diff diff_ex intersection intersection_ex union union_ex 
-    offset offset_ex offset2 offset2_ex intersection_ppl CLIPPER_OFFSET_SCALE JT_MITER);
+    offset offset2 offset_ex offset2_ex JT_MITER);
 use Slic3r::Print::State ':steps';
 use Slic3r::Surface ':types';
-
-
-# TODO: lazy
-sub fill_maker {
-    my $self = shift;
-    return Slic3r::Fill->new(bounding_box => $self->bounding_box);
-}
-
-sub region_volumes {
-    my $self = shift;
-    return [ map $self->get_region_volumes($_), 0..($self->region_count - 1) ];
-}
 
 sub layers {
     my $self = shift;
@@ -34,6 +22,7 @@ sub support_layers {
     return [ map $self->get_support_layer($_), 0..($self->support_layer_count - 1) ];
 }
 
+<<<<<<< HEAD
 sub generate_support_material {
     my $self = shift;
     
@@ -83,4 +72,6 @@ sub _support_material {
     );
 }
 
+=======
+>>>>>>> origin/merill-merge
 1;

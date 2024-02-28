@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+print "This script is currently used for installing Perl dependenices for running\n";
+print "the libslic3r unit / integration tests through Perl prove.\n";
+print "If you don't plan to run the unit / integration tests, you don't need to\n";
+print "install these dependencies to build and run SupserSlicer.\n";
+
 use strict;
 use warnings;
 
@@ -8,11 +13,21 @@ use File::Spec;
 
 my %prereqs = qw(
     Devel::CheckLib                 0
+<<<<<<< HEAD
     Encode                          0
     Encode::Locale                  1.05
     ExtUtils::CppGuess              0
     ExtUtils::MakeMaker             6.80
     ExtUtils::ParseXS               3.35
+=======
+    ExtUtils::MakeMaker             6.80
+    ExtUtils::ParseXS               3.22
+    ExtUtils::XSpp                  0
+    ExtUtils::XSpp::Cmd             0
+    ExtUtils::CppGuess              0
+    ExtUtils::Typemaps              0
+    ExtUtils::Typemaps::Basic       0
+>>>>>>> origin/merill-merge
     File::Basename                  0
     File::Spec                      0
     Getopt::Long                    0
@@ -21,11 +36,8 @@ my %prereqs = qw(
     POSIX                           0
     Scalar::Util                    0
     Test::More                      0
-    Thread::Semaphore               0
     IO::Scalar                      0
-    threads                         1.96
     Time::HiRes                     0
-    Unicode::Normalize              0
 );
 my %recommends = qw(
     Class::XSAccessor               0
@@ -35,30 +47,7 @@ my %recommends = qw(
 );
 
 my $sudo    = grep { $_ eq '--sudo' } @ARGV;
-my $gui     = grep { $_ eq '--gui' } @ARGV;
-my $xs_only = grep { $_ eq '--xs' }  @ARGV;
-if ($gui) {
-    %prereqs = qw(
-    Class::Accessor                 0
-    Wx                              0.9918
-    Socket                          2.016
-    );
-    %recommends = qw(
-    Growl::GNTP                     0.15
-    Wx::GLCanvas                    0
-    OpenGL                          0
-    LWP::UserAgent                  0
-    Net::Bonjour                    0
-    );
-    if ($^O eq 'MSWin32') {
-        $recommends{"Win32::TieRegistry"} = 0;
-        
-        # we need an up-to-date Win32::API because older aren't thread-safe (GH #2517)
-        $prereqs{'Win32::API'} = 0.79;
-    }
-} elsif ($xs_only) {
-    %prereqs = %recommends = ();
-}
+my $nolocal = grep { $_ eq '--nolocal' }  @ARGV;
 
 my @missing_prereqs = ();
 if ($ENV{SLIC3R_NO_AUTO}) {
@@ -109,7 +98,11 @@ EOF
         if !$cpanm;
     my @cpanm_args = ();
     push @cpanm_args, "--sudo" if $sudo;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> origin/merill-merge
     # install local::lib without --local-lib otherwise it's not usable afterwards
     if (!eval "use local::lib qw(local-lib); 1") {
         my $res = system $cpanm, @cpanm_args, 'local::lib';
@@ -117,8 +110,13 @@ EOF
             if $res != 0;
     }
     
+<<<<<<< HEAD
     push @cpanm_args, ('--local-lib', 'local-lib');
     
+=======
+    push @cpanm_args, ('--local-lib', 'local-lib') if ! $nolocal;
+
+>>>>>>> origin/merill-merge
     # make sure our cpanm is updated (old ones don't support the ~ syntax)
     system $cpanm, @cpanm_args, 'App::cpanminus';
     
@@ -129,13 +127,21 @@ EOF
         
         # temporary workaround for upstream bug in test
         push @cmd, '--notest'
+<<<<<<< HEAD
             if $module =~ /^(?:OpenGL|Math::PlanePath|Test::Harness|IO::Scalar)$/;
+=======
+            if $module =~ /^(?:OpenGL|Test::Harness)$/;
+>>>>>>> origin/merill-merge
         
         # do not try to reinstall modules that were already
         # installed manually
         push @cmd, '--skip-satisfied';
 
         push @cmd, "$module~$version";
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/merill-merge
         my $res = system @cmd;
         if ($res != 0) {
             if (exists $prereqs{$module}) {
@@ -145,36 +151,12 @@ EOF
             }
         }
     }
-    
-    if (!$gui) {
-        # clean xs directory before reinstalling, to make sure Build is called
-        # with current perl binary
-        if (-e './xs/Build') {
-            if ($^O eq 'MSWin32') {
-                system '.\xs\Build', 'distclean';
-            } else {
-                system './xs/Build', 'distclean';
-            }
-        }
-        my $res = system $cpanm, @cpanm_args, '--reinstall', '--verbose', './xs';
-        if ($res != 0) {
-            die "The XS/C++ code failed to compile, aborting\n";
-        }
-    }
 }
 
-if (@missing_prereqs) {
-    printf "The following prerequisites failed to install: %s\n", join(', ', @missing_prereqs);
-    exit 1;
-} elsif (!$gui) {
-    eval "use App::Prove; 1" or die "Failed to load App::Prove";
-    my $res = App::Prove->new->run ? 0 : 1;
-    if ($res == 0) {
-        print "If you also want to use the GUI you can now run `perl Build.PL --gui` to install the required modules.\n";
-    } else {
-        print "Some tests failed. Please report the failure to the author!\n";
-    }
-    exit $res;
-}
-
+print "\n";
+print "In the next step, you need to build the SupserSlicer C++ library.\n";
+print "1) Create a build directory and change to it\n";
+print "2) run cmake .. -DCMAKE_BUILD_TYPE=Release\n";
+print "3) run make\n";
+print "4) to execute the automatic tests, run ctest --verbose\n";
 __END__

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 use Test::More tests => 27;
+=======
+use Test::More tests => 24;
+>>>>>>> origin/merill-merge
 use strict;
 use warnings;
 
@@ -21,7 +25,7 @@ use Slic3r::Test;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('wipe', [1]);
     $config->set('retract_layer_change', [0]);
     
@@ -52,7 +56,7 @@ use Slic3r::Test;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('z_offset', 5);
     $config->set('start_gcode', '');
     
@@ -86,7 +90,7 @@ use Slic3r::Test;
     # - Z moves are correctly generated for both objects
     # - no travel moves go outside skirt
     # - temperatures are set correctly
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('gcode_comments', 1);
     $config->set('complete_objects', 1);
     $config->set('extrusion_axis', 'A');
@@ -130,7 +134,7 @@ use Slic3r::Test;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('retract_length', [1000000]);
     $config->set('use_relative_e_distances', 1);
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
@@ -162,7 +166,7 @@ use Slic3r::Test;
     };
     
     {
-        my $config = Slic3r::Config->new_from_defaults;
+        my $config = Slic3r::Config::new_from_defaults;
         $config->set('gcode_flavor', 'sailfish');
         $config->set('raft_layers', 3);
         my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
@@ -170,21 +174,21 @@ use Slic3r::Test;
     }
     
     {
-        my $config = Slic3r::Config->new_from_defaults;
+        my $config = Slic3r::Config::new_from_defaults;
         $config->set('gcode_flavor', 'sailfish');
         my $print = Slic3r::Test::init_print('20mm_cube', config => $config, duplicate => 2);
         $test->($print, 'two copies of single object');
     }
     
     {
-        my $config = Slic3r::Config->new_from_defaults;
+        my $config = Slic3r::Config::new_from_defaults;
         $config->set('gcode_flavor', 'sailfish');
         my $print = Slic3r::Test::init_print(['20mm_cube','20mm_cube'], config => $config);
         $test->($print, 'two objects');
     }
     
     {
-        my $config = Slic3r::Config->new_from_defaults;
+        my $config = Slic3r::Config::new_from_defaults;
         $config->set('gcode_flavor', 'sailfish');
         my $print = Slic3r::Test::init_print('20mm_cube', config => $config, scale_xyz => [1,1, 1/(20/$config->layer_height) ]);
         $test->($print, 'one layer object');
@@ -192,28 +196,57 @@ use Slic3r::Test;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('start_gcode', 'START:[input_filename]');
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
     my $gcode = Slic3r::Test::gcode($print);
     like $gcode, qr/START:20mm_cube/, '[input_filename] is also available in custom G-code';
 }
 
+# The current Spiral Vase slicing code removes the holes and all but the largest contours from each slice,
+# therefore the following test is no more valid.
+#{
+#    my $config = Slic3r::Config::new_from_defaults;
+#    $config->set('spiral_vase', 1);
+#    my $print = Slic3r::Test::init_print('cube_with_hole', config => $config);
+#    
+#    my $spiral = 0;
+#    Slic3r::GCode::Reader->new->parse(Slic3r::Test::gcode($print), sub {
+#        my ($self, $cmd, $args, $info) = @_;
+#        
+#        if ($cmd eq 'G1' && exists $args->{E} && exists $args->{Z}) {
+#            $spiral = 1;
+#        }
+#    });
+#    
+#    ok !$spiral, 'spiral vase is correctly disabled on layers with multiple loops';
+#}
+
+
 {
-    my $config = Slic3r::Config->new_from_defaults;
-    $config->set('spiral_vase', 1);
+    # Tests that the Repetier flavor produces M201 Xnnn Ynnn for resetting
+    # acceleration, also that M204 Snnn syntax is not generated. 
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('gcode_flavor', 'repetier');
+    $config->set('default_acceleration', 1337);
     my $print = Slic3r::Test::init_print('cube_with_hole', config => $config);
     
-    my $spiral = 0;
+    my $has_accel = 0;
+    my $has_m204 = 0;
     Slic3r::GCode::Reader->new->parse(Slic3r::Test::gcode($print), sub {
         my ($self, $cmd, $args, $info) = @_;
         
-        if ($cmd eq 'G1' && exists $args->{E} && exists $args->{Z}) {
-            $spiral = 1;
+        if ($cmd eq 'M201' && exists $args->{X} && exists $args->{Y}) {
+            if ($args->{X} == 1337 && $args->{Y} == 1337) {
+                $has_accel = 1;
+            }
+        }
+        if ($cmd eq 'M204' && exists $args->{S}) {
+            $has_m204 = 1;
         }
     });
-    
-    ok !$spiral, 'spiral vase is correctly disabled on layers with multiple loops';
+    ok $has_accel, 'M201 is generated for repetier firmware.';
+    ok !$has_m204, 'M204 is not generated for repetier firmware';
 }
 
 {

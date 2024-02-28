@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 use Test::More tests => 27;
+=======
+use Test::More tests => 26;
+>>>>>>> origin/merill-merge
 use strict;
 use warnings;
 
@@ -14,7 +18,7 @@ use Slic3r::Geometry qw(epsilon);
 use Slic3r::Test qw(_eq);
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     my $duplicate = 1;
 
     my $test = sub {
@@ -96,6 +100,7 @@ use Slic3r::Test qw(_eq);
         1;
     };
 
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('first_layer_height',      $config->layer_height);
     $config->set('first_layer_speed',       '100%');
     $config->set('start_gcode',             '');  # to avoid dealing with the nozzle lift in start G-code
@@ -132,7 +137,7 @@ use Slic3r::Test qw(_eq);
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('start_gcode', '');  # prevent any default priming Z move from affecting our lift detection
     $config->set('retract_length', [0]);
     $config->set('retract_layer_change', [0]);
@@ -166,7 +171,7 @@ use Slic3r::Test qw(_eq);
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('use_firmware_retraction', 1);
     
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
@@ -189,7 +194,7 @@ use Slic3r::Test qw(_eq);
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('use_firmware_retraction', 1);
     $config->set('retract_length', [0]);
     
@@ -207,10 +212,14 @@ use Slic3r::Test qw(_eq);
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('start_gcode', '');
     $config->set('retract_lift', [3, 4]);
+<<<<<<< HEAD
     $config->set('only_retract_when_crossing_perimeters', 0);
+=======
+>>>>>>> origin/merill-merge
     
     my @lifted_at = ();
     my $test = sub {
@@ -255,10 +264,13 @@ use Slic3r::Test qw(_eq);
         });
     };
     
+<<<<<<< HEAD
     $config->set('retract_layer_change', [1,1]);
     $test->();
     ok !!@lifted_at, 'lift is compatible with retract_layer_change';
     
+=======
+>>>>>>> origin/merill-merge
     $config->set('retract_lift_above', [0, 0]);
     $config->set('retract_lift_below', [0, 0]);
     $test->();
@@ -270,6 +282,7 @@ use Slic3r::Test qw(_eq);
     ok !!@lifted_at, 'lift takes place when above/below != 0';
     ok !(any { $_ < $config->get_at('retract_lift_above', 0) } @lifted_at),
         'Z is not lifted below the configured value';
+<<<<<<< HEAD
     {
         my $below = $config->get_at('retract_lift_below', 0);
         $below += $config->layer_height if $config->get_at('retract_layer_change', 0);
@@ -277,6 +290,11 @@ use Slic3r::Test qw(_eq);
             'Z is not lifted above the configured value';
     }
     
+=======
+    ok !(any { $_ > $config->get_at('retract_lift_below', 0) } @lifted_at),
+        'Z is not lifted above the configured value';
+        
+>>>>>>> origin/merill-merge
     # check lifting with different values for 2. extruder
     $config->set('perimeter_extruder', 2);
     $config->set('infill_extruder', 2);
@@ -291,6 +309,7 @@ use Slic3r::Test qw(_eq);
     ok !!@lifted_at, 'lift takes place when above/below != 0 for 2. extruder';
     ok !(any { $_ < $config->get_at('retract_lift_above', 1) } @lifted_at),
         'Z is not lifted below the configured value for 2. extruder';
+<<<<<<< HEAD
     {
         my $below = $config->get_at('retract_lift_below', 1);
         $below += $config->layer_height if $config->get_at('retract_layer_change', 1);
@@ -305,6 +324,10 @@ use Slic3r::Test qw(_eq);
     $config->set('retract_lift_below', [0, 0]);
     $test->();
     
+=======
+    ok !(any { $_ > $config->get_at('retract_lift_below', 1) } @lifted_at),
+        'Z is not lifted above the configured value for 2. extruder';
+>>>>>>> origin/merill-merge
 }
 
 __END__

@@ -5,12 +5,14 @@ namespace Slic3r {
 
 REGISTER_CLASS(ExPolygon, "ExPolygon");
 REGISTER_CLASS(ExPolygonCollection, "ExPolygon::Collection");
-REGISTER_CLASS(Extruder, "Extruder");
+REGISTER_CLASS(ExtrusionMultiPath, "ExtrusionMultiPath");
 REGISTER_CLASS(ExtrusionPath, "ExtrusionPath");
 REGISTER_CLASS(ExtrusionLoop, "ExtrusionLoop");
-// there is no ExtrusionLoop::Collection or ExtrusionEntity::Collection
 REGISTER_CLASS(ExtrusionEntityCollection, "ExtrusionPath::Collection");
+REGISTER_CLASS(ExtrusionSimulator, "ExtrusionSimulator");
+REGISTER_CLASS(Filler, "Filler");
 REGISTER_CLASS(Flow, "Flow");
+<<<<<<< HEAD
 REGISTER_CLASS(Filler, "Filler");
 REGISTER_CLASS(AvoidCrossingPerimeters, "GCode::AvoidCrossingPerimeters");
 REGISTER_CLASS(CoolingBuffer, "GCode::CoolingBuffer");
@@ -21,6 +23,10 @@ REGISTER_CLASS(GCode, "GCode");
 REGISTER_CLASS(GCodeSender, "GCode::Sender");
 REGISTER_CLASS(GCodeTimeEstimator, "GCode::TimeEstimator");
 REGISTER_CLASS(GCodeWriter, "GCode::Writer");
+=======
+REGISTER_CLASS(CoolingBuffer, "GCode::CoolingBuffer");
+REGISTER_CLASS(GCode, "GCode");
+>>>>>>> origin/merill-merge
 REGISTER_CLASS(Layer, "Layer");
 REGISTER_CLASS(SupportLayer, "Layer::Support");
 REGISTER_CLASS(LayerRegion, "Layer::Region");
@@ -40,15 +46,13 @@ REGISTER_CLASS(ModelMaterial, "Model::Material");
 REGISTER_CLASS(ModelObject, "Model::Object");
 REGISTER_CLASS(ModelVolume, "Model::Volume");
 REGISTER_CLASS(ModelInstance, "Model::Instance");
-REGISTER_CLASS(MotionPlanner, "MotionPlanner");
 REGISTER_CLASS(BoundingBox, "Geometry::BoundingBox");
 REGISTER_CLASS(BoundingBoxf, "Geometry::BoundingBoxf");
 REGISTER_CLASS(BoundingBoxf3, "Geometry::BoundingBoxf3");
 REGISTER_CLASS(BridgeDetector, "BridgeDetector");
 REGISTER_CLASS(Point, "Point");
-REGISTER_CLASS(Point3, "Point3");
-REGISTER_CLASS(Pointf, "Pointf");
-REGISTER_CLASS(Pointf3, "Pointf3");
+__REGISTER_CLASS(Vec2d, "Pointf");
+__REGISTER_CLASS(Vec3d, "Pointf3");
 REGISTER_CLASS(DynamicPrintConfig, "Config");
 REGISTER_CLASS(StaticPrintConfig, "Config::Static");
 REGISTER_CLASS(PrintObjectConfig, "Config::PrintObject");
@@ -60,21 +64,22 @@ REGISTER_CLASS(SLAPrint, "SLAPrint");
 REGISTER_CLASS(SlicingAdaptive, "SlicingAdaptive");
 REGISTER_CLASS(Surface, "Surface");
 REGISTER_CLASS(SurfaceCollection, "Surface::Collection");
+<<<<<<< HEAD
 REGISTER_CLASS(TransformationMatrix, "TransformationMatrix");
+=======
+REGISTER_CLASS(PrintObjectSupportMaterial, "Print::SupportMaterial2");
+>>>>>>> origin/merill-merge
 REGISTER_CLASS(TriangleMesh, "TriangleMesh");
-REGISTER_CLASS(GLVertexArray, "GUI::_3DScene::GLVertexArray");
 
-SV*
-ConfigBase__as_hash(ConfigBase* THIS) {
-    HV* hv = newHV();
-    
-    t_config_option_keys opt_keys = THIS->keys();
-    for (t_config_option_keys::const_iterator it = opt_keys.begin(); it != opt_keys.end(); ++it)
-        (void)hv_store( hv, it->c_str(), it->length(), ConfigBase__get(THIS, *it), 0 );
-    
+SV* ConfigBase__as_hash(ConfigBase* THIS)
+{
+    HV* hv = newHV();    
+    for (auto &key : THIS->keys())
+        (void)hv_store(hv, key.c_str(), key.length(), ConfigBase__get(THIS, key), 0);
     return newRV_noinc((SV*)hv);
 }
 
+<<<<<<< HEAD
 SV*
 ConfigBase__get(ConfigBase* THIS, const t_config_option_key &opt_key) {
     ConfigOption* opt = THIS->option(opt_key);
@@ -82,44 +87,58 @@ ConfigBase__get(ConfigBase* THIS, const t_config_option_key &opt_key) {
     
     const ConfigOptionDef& def = THIS->def->get(opt_key);
     return ConfigOption_to_SV(*opt, def);
+=======
+SV* ConfigBase__get(ConfigBase* THIS, const t_config_option_key &opt_key)
+{
+    ConfigOption *opt = THIS->option(opt_key, false);
+    return (opt == nullptr) ? 
+        &PL_sv_undef :
+        ConfigOption_to_SV(*opt, *THIS->def()->get(opt_key));
+>>>>>>> origin/merill-merge
 }
 
-SV*
-ConfigOption_to_SV(const ConfigOption &opt, const ConfigOptionDef &def) {
-    if (def.type == coFloat) {
-        const ConfigOptionFloat* optv = dynamic_cast<const ConfigOptionFloat*>(&opt);
-        return newSVnv(optv->value);
-    } else if (def.type == coFloats) {
-        const ConfigOptionFloats* optv = dynamic_cast<const ConfigOptionFloats*>(&opt);
+SV* ConfigOption_to_SV(const ConfigOption &opt, const ConfigOptionDef &def)
+{
+    switch (def.type) {
+    case coFloat:
+    case coPercent:
+        return newSVnv(static_cast<const ConfigOptionFloat*>(&opt)->value);
+    case coFloats:
+    case coPercents:
+    {
+        auto optv = static_cast<const ConfigOptionFloats*>(&opt);
         AV* av = newAV();
         av_fill(av, optv->values.size()-1);
-        for (std::vector<double>::const_iterator it = optv->values.begin(); it != optv->values.end(); ++it)
-            av_store(av, it - optv->values.begin(), newSVnv(*it));
+        for (const double &v : optv->values)
+            av_store(av, &v - optv->values.data(), newSVnv(v));
         return newRV_noinc((SV*)av);
-    } else if (def.type == coPercent) {
-        const ConfigOptionPercent* optv = dynamic_cast<const ConfigOptionPercent*>(&opt);
-        return newSVnv(optv->value);
-    } else if (def.type == coInt) {
-        const ConfigOptionInt* optv = dynamic_cast<const ConfigOptionInt*>(&opt);
-        return newSViv(optv->value);
-    } else if (def.type == coInts) {
-        const ConfigOptionInts* optv = dynamic_cast<const ConfigOptionInts*>(&opt);
+    }
+    case coInt:
+        return newSViv(static_cast<const ConfigOptionInt*>(&opt)->value);
+    case coInts:
+    {
+        auto optv = static_cast<const ConfigOptionInts*>(&opt);
         AV* av = newAV();
         av_fill(av, optv->values.size()-1);
-        for (std::vector<int>::const_iterator it = optv->values.begin(); it != optv->values.end(); ++it)
-            av_store(av, it - optv->values.begin(), newSViv(*it));
+        for (const int &v : optv->values)
+            av_store(av, &v - optv->values.data(), newSViv(v));
         return newRV_noinc((SV*)av);
-    } else if (def.type == coString) {
-        const ConfigOptionString* optv = dynamic_cast<const ConfigOptionString*>(&opt);
+    }
+    case coString:
+    {
+        auto optv = static_cast<const ConfigOptionString*>(&opt);
         // we don't serialize() because that would escape newlines
         return newSVpvn_utf8(optv->value.c_str(), optv->value.length(), true);
-    } else if (def.type == coStrings) {
-        const ConfigOptionStrings* optv = dynamic_cast<const ConfigOptionStrings*>(&opt);
+    }
+    case coStrings:
+    {
+        auto optv = static_cast<const ConfigOptionStrings*>(&opt);
         AV* av = newAV();
         av_fill(av, optv->values.size()-1);
-        for (std::vector<std::string>::const_iterator it = optv->values.begin(); it != optv->values.end(); ++it)
-            av_store(av, it - optv->values.begin(), newSVpvn_utf8(it->c_str(), it->length(), true));
+        for (const std::string &v : optv->values)
+            av_store(av, &v - optv->values.data(), newSVpvn_utf8(v.c_str(), v.length(), true));
         return newRV_noinc((SV*)av);
+<<<<<<< HEAD
     } else if (def.type == coPoint) {
         const ConfigOptionPoint* optv = dynamic_cast<const ConfigOptionPoint*>(&opt);
         return perl_to_SV_clone_ref(optv->value);
@@ -128,32 +147,46 @@ ConfigOption_to_SV(const ConfigOption &opt, const ConfigOptionDef &def) {
         return perl_to_SV_clone_ref(optv->value);
     } else if (def.type == coPoints) {
         const ConfigOptionPoints* optv = dynamic_cast<const ConfigOptionPoints*>(&opt);
+=======
+    }
+    case coPoint:
+        return perl_to_SV_clone_ref(static_cast<const ConfigOptionPoint*>(&opt)->value);
+    case coPoint3:
+        return perl_to_SV_clone_ref(static_cast<const ConfigOptionPoint3*>(&opt)->value);
+    case coPoints:
+    {
+        auto optv = static_cast<const ConfigOptionPoints*>(&opt);
+>>>>>>> origin/merill-merge
         AV* av = newAV();
         av_fill(av, optv->values.size()-1);
-        for (Pointfs::const_iterator it = optv->values.begin(); it != optv->values.end(); ++it)
-            av_store(av, it - optv->values.begin(), perl_to_SV_clone_ref(*it));
+        for (const Vec2d &v : optv->values)
+            av_store(av, &v - optv->values.data(), perl_to_SV_clone_ref(v));
         return newRV_noinc((SV*)av);
-    } else if (def.type == coBool) {
-        const ConfigOptionBool* optv = dynamic_cast<const ConfigOptionBool*>(&opt);
-        return newSViv(optv->value ? 1 : 0);
-    } else if (def.type == coBools) {
-        const ConfigOptionBools* optv = dynamic_cast<const ConfigOptionBools*>(&opt);
+    }
+    case coBool:
+        return newSViv(static_cast<const ConfigOptionBool*>(&opt)->value ? 1 : 0);
+    case coBools:
+    {
+        auto optv = static_cast<const ConfigOptionBools*>(&opt);
         AV* av = newAV();
         av_fill(av, optv->values.size()-1);
-        for (std::vector<bool>::const_iterator it = optv->values.begin(); it != optv->values.end(); ++it)
-            av_store(av, it - optv->values.begin(), newSViv(*it ? 1 : 0));
+        for (size_t i = 0; i < optv->values.size(); ++ i)
+            av_store(av, i, newSViv(optv->values[i] ? 1 : 0));
         return newRV_noinc((SV*)av);
-    } else {
+    }
+    default:
         std::string serialized = opt.serialize();
         return newSVpvn_utf8(serialized.c_str(), serialized.length(), true);
     }
 }
 
-SV*
-ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, size_t i) {
-    ConfigOption* opt = THIS->option(opt_key);
-    if (opt == NULL) return &PL_sv_undef;
+SV* ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, size_t i)
+{
+    ConfigOption* opt = THIS->option(opt_key, false);
+    if (opt == nullptr)
+        return &PL_sv_undef;
     
+<<<<<<< HEAD
     const ConfigOptionDef& def = THIS->def->get(opt_key);
     if (def.type == coFloats) {
         ConfigOptionFloats* optv = dynamic_cast<ConfigOptionFloats*>(opt);
@@ -163,9 +196,21 @@ ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, size_t 
         return newSViv(optv->get_at(i));
     } else if (def.type == coStrings) {
         ConfigOptionStrings* optv = dynamic_cast<ConfigOptionStrings*>(opt);
+=======
+    const ConfigOptionDef* def = THIS->def()->get(opt_key);
+    switch (def->type) {
+    case coFloats:
+    case coPercents:
+        return newSVnv(static_cast<ConfigOptionFloats*>(opt)->get_at(i));
+    case coInts:
+        return newSViv(static_cast<ConfigOptionInts*>(opt)->get_at(i));
+    case coStrings:
+    {
+>>>>>>> origin/merill-merge
         // we don't serialize() because that would escape newlines
-        std::string val = optv->get_at(i);
+        const std::string &val = static_cast<ConfigOptionStrings*>(opt)->get_at(i);
         return newSVpvn_utf8(val.c_str(), val.length(), true);
+<<<<<<< HEAD
     } else if (def.type == coPoints) {
         ConfigOptionPoints* optv = dynamic_cast<ConfigOptionPoints*>(opt);
         return perl_to_SV_clone_ref(optv->get_at(i));
@@ -173,13 +218,22 @@ ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, size_t 
         ConfigOptionBools* optv = dynamic_cast<ConfigOptionBools*>(opt);
         return newSViv(optv->get_at(i) ? 1 : 0);
     } else {
+=======
+    }
+    case coPoints:
+        return perl_to_SV_clone_ref(static_cast<ConfigOptionPoints*>(opt)->get_at(i));
+    case coBools:
+        return newSViv(static_cast<ConfigOptionBools*>(opt)->get_at(i) ? 1 : 0);
+    default:
+>>>>>>> origin/merill-merge
         return &PL_sv_undef;
     }
 }
 
-bool
-ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value) {
+bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
+{
     ConfigOption* opt = THIS->option(opt_key, true);
+<<<<<<< HEAD
     if (opt == NULL) CONFESS("Trying to set non-existing option");
     
     const ConfigOptionDef& def = THIS->def->get(opt_key);
@@ -190,13 +244,46 @@ ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
     } else if (def.type == coFloats) {
         ConfigOptionFloats* optv = dynamic_cast<ConfigOptionFloats*>(opt);
         std::vector<double> values;
+=======
+    if (opt == nullptr)
+        CONFESS("Trying to set non-existing option");
+    const ConfigOptionDef* def = THIS->def()->get(opt_key);
+    if (opt->type() != def->type)
+        CONFESS("Option type is different from the definition");
+    switch (def->type) {
+    case coFloat:
+        if (!looks_like_number(value))
+            return false;
+        static_cast<ConfigOptionFloat*>(opt)->value = SvNV(value);
+        break;
+    case coFloats:
+    {
+        std::vector<double> &values = static_cast<ConfigOptionFloats*>(opt)->values;
+>>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
+        values.clear();
+        values.reserve(len);
+        for (size_t i = 0; i < len; ++ i) {
+            SV** elem = av_fetch(av, i, 0);
+            if (elem == NULL || !looks_like_number(*elem)) return false;
+            values.emplace_back(SvNV(*elem));
+        }
+        break;
+    }
+    case coPercents:
+    {
+        std::vector<double> &values = static_cast<ConfigOptionPercents*>(opt)->values;
+        AV* av = (AV*)SvRV(value);
+        const size_t len = av_len(av)+1;
+        values.clear();
+        values.reserve(len);
         for (size_t i = 0; i < len; i++) {
             SV** elem = av_fetch(av, i, 0);
             if (elem == NULL || !looks_like_number(*elem)) return false;
-            values.push_back(SvNV(*elem));
+            values.emplace_back(SvNV(*elem));
         }
+<<<<<<< HEAD
         optv->values = values;
     } else if (def.type == coInt) {
         if (!looks_like_number(value)) return false;
@@ -205,13 +292,27 @@ ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
     } else if (def.type == coInts) {
         ConfigOptionInts* optv = dynamic_cast<ConfigOptionInts*>(opt);
         std::vector<int> values;
+=======
+        break;
+    }
+    case coInt:
+        if (!looks_like_number(value)) return false;
+        static_cast<ConfigOptionInt*>(opt)->value = SvIV(value);
+        break;
+    case coInts:
+    {
+        std::vector<int> &values = static_cast<ConfigOptionInts*>(opt)->values;
+>>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
+        values.clear();
+        values.reserve(len);
         for (size_t i = 0; i < len; i++) {
             SV** elem = av_fetch(av, i, 0);
             if (elem == NULL || !looks_like_number(*elem)) return false;
-            values.push_back(SvIV(*elem));
+            values.emplace_back(SvIV(*elem));
         }
+<<<<<<< HEAD
         optv->values = values;
     } else if (def.type == coString) {
         ConfigOptionString* optv = dynamic_cast<ConfigOptionString*>(opt);
@@ -219,13 +320,26 @@ ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
     } else if (def.type == coStrings) {
         ConfigOptionStrings* optv = dynamic_cast<ConfigOptionStrings*>(opt);
         optv->values.clear();
+=======
+        break;
+    }
+    case coString:
+        static_cast<ConfigOptionString*>(opt)->value = std::string(SvPV_nolen(value), SvCUR(value));
+        break;
+    case coStrings:
+    {
+        std::vector<std::string> &values = static_cast<ConfigOptionStrings*>(opt)->values;
+>>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
+        values.clear();
+        values.reserve(len);
         for (size_t i = 0; i < len; i++) {
             SV** elem = av_fetch(av, i, 0);
             if (elem == NULL) return false;
-            optv->values.push_back(std::string(SvPV_nolen(*elem), SvCUR(*elem)));
+            values.emplace_back(std::string(SvPV_nolen(*elem), SvCUR(*elem)));
         }
+<<<<<<< HEAD
     } else if (def.type == coPoint) {
         ConfigOptionPoint* optv = dynamic_cast<ConfigOptionPoint*>(opt);
         return from_SV_check(value, &optv->value);
@@ -235,14 +349,29 @@ ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
     } else if (def.type == coPoints) {
         ConfigOptionPoints* optv = dynamic_cast<ConfigOptionPoints*>(opt);
         std::vector<Pointf> values;
+=======
+        break;
+    }
+    case coPoint:
+        return from_SV_check(value, &static_cast<ConfigOptionPoint*>(opt)->value);
+//    case coPoint3:        
+        // not gonna fix it, die Perl die!
+//        return from_SV_check(value, &static_cast<ConfigOptionPoint3*>(opt)->value);
+    case coPoints:
+    {
+        std::vector<Vec2d> &values = static_cast<ConfigOptionPoints*>(opt)->values;
+>>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
+        values.clear();
+        values.reserve(len);
         for (size_t i = 0; i < len; i++) {
             SV** elem = av_fetch(av, i, 0);
-            Pointf point;
+            Vec2d point(Vec2d::Zero());
             if (elem == NULL || !from_SV_check(*elem, &point)) return false;
-            values.push_back(point);
+            values.emplace_back(point);
         }
+<<<<<<< HEAD
         optv->values = values;
     } else if (def.type == coBool) {
         ConfigOptionBool* optv = dynamic_cast<ConfigOptionBool*>(opt);
@@ -250,42 +379,56 @@ ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
     } else if (def.type == coBools) {
         ConfigOptionBools* optv = dynamic_cast<ConfigOptionBools*>(opt);
         optv->values.clear();
+=======
+        break;
+    }
+    case coBool:
+        static_cast<ConfigOptionBool*>(opt)->value = SvTRUE(value);
+        break;
+    case coBools:
+    {
+        std::vector<unsigned char> &values = static_cast<ConfigOptionBools*>(opt)->values;
+>>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
+        values.clear();
+        values.reserve(len);
         for (size_t i = 0; i < len; i++) {
             SV** elem = av_fetch(av, i, 0);
             if (elem == NULL) return false;
-            optv->values.push_back(SvTRUE(*elem));
+            values.emplace_back(SvTRUE(*elem));
         }
-    } else {
-        if (!opt->deserialize( std::string(SvPV_nolen(value)) )) return false;
+        break;
+    }
+    default:
+        if (! opt->deserialize(std::string(SvPV_nolen(value)), ForwardCompatibilitySubstitutionRule::Disable))
+            return false;
     }
     return true;
 }
 
 /* This method is implemented as a workaround for this typemap bug:
    https://rt.cpan.org/Public/Bug/Display.html?id=94110 */
-bool
-ConfigBase__set_deserialize(ConfigBase* THIS, const t_config_option_key &opt_key, SV* str) {
+bool ConfigBase__set_deserialize(ConfigBase* THIS, const t_config_option_key &opt_key, SV* str)
+{
     size_t len;
     const char * c = SvPV(str, len);
     std::string value(c, len);
-    
-    return THIS->set_deserialize(opt_key, value);
+    ConfigSubstitutionContext ctxt{ ForwardCompatibilitySubstitutionRule::Disable };
+    return THIS->set_deserialize_nothrow(opt_key, value, ctxt);
 }
 
-void
-ConfigBase__set_ifndef(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value, bool deserialize)
+void ConfigBase__set_ifndef(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value, bool deserialize)
 {
-    if (!THIS->has(opt_key)) {
-        if (deserialize) {
-            ConfigBase__set_deserialize(THIS, opt_key, value);
-        } else {
-            ConfigBase__set(THIS, opt_key, value);
-        }
-    }
+    if (THIS->has(opt_key))
+        return;
+    if (deserialize)
+        ConfigBase__set_deserialize(THIS, opt_key, value);
+    else
+        ConfigBase__set(THIS, opt_key, value);
 }
 
+<<<<<<< HEAD
 bool
 StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, SV* value) {
     const ConfigOptionDef& optdef = THIS->def->get(opt_key);
@@ -297,6 +440,17 @@ StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, SV* va
     }
     
     return ConfigBase__set(THIS, opt_key, value);
+=======
+bool StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, SV* value)
+{
+    const ConfigOptionDef* optdef = THIS->def()->get(opt_key);
+    if (optdef->shortcut.empty())
+        return ConfigBase__set(THIS, opt_key, value);
+    for (const t_config_option_key &key : optdef->shortcut)
+        if (! StaticConfig__set(THIS, key, value))
+            return false;
+    return true;
+>>>>>>> origin/merill-merge
 }
 
 SV* to_AV(ExPolygon* expolygon)
@@ -453,8 +607,8 @@ SV* to_SV_pureperl(const Point* THIS)
 {
     AV* av = newAV();
     av_fill(av, 1);
-    av_store(av, 0, newSViv(THIS->x));
-    av_store(av, 1, newSViv(THIS->y));
+    av_store(av, 0, newSViv((*THIS)(0)));
+    av_store(av, 1, newSViv((*THIS)(1)));
     return newRV_noinc((SV*)av);
 }
 
@@ -463,8 +617,7 @@ void from_SV(SV* point_sv, Point* point)
     AV* point_av = (AV*)SvRV(point_sv);
     // get a double from Perl and round it, otherwise
     // it would get truncated
-    point->x = lrint(SvNV(*av_fetch(point_av, 0, 0)));
-    point->y = lrint(SvNV(*av_fetch(point_av, 1, 0)));
+    (*point) = Point(SvNV(*av_fetch(point_av, 0, 0)), SvNV(*av_fetch(point_av, 1, 0)));
 }
 
 void from_SV_check(SV* point_sv, Point* point)
@@ -478,33 +631,32 @@ void from_SV_check(SV* point_sv, Point* point)
     }
 }
 
-SV* to_SV_pureperl(const Pointf* point)
+SV* to_SV_pureperl(const Vec2d* point)
 {
     AV* av = newAV();
     av_fill(av, 1);
-    av_store(av, 0, newSVnv(point->x));
-    av_store(av, 1, newSVnv(point->y));
+    av_store(av, 0, newSVnv((*point)(0)));
+    av_store(av, 1, newSVnv((*point)(1)));
     return newRV_noinc((SV*)av);
 }
 
-bool from_SV(SV* point_sv, Pointf* point)
+bool from_SV(SV* point_sv, Vec2d* point)
 {
     AV* point_av = (AV*)SvRV(point_sv);
     SV* sv_x = *av_fetch(point_av, 0, 0);
     SV* sv_y = *av_fetch(point_av, 1, 0);
     if (!looks_like_number(sv_x) || !looks_like_number(sv_y)) return false;
     
-    point->x = SvNV(sv_x);
-    point->y = SvNV(sv_y);
+    *point = Vec2d(SvNV(sv_x), SvNV(sv_y));
     return true;
 }
 
-bool from_SV_check(SV* point_sv, Pointf* point)
+bool from_SV_check(SV* point_sv, Vec2d* point)
 {
     if (sv_isobject(point_sv) && (SvTYPE(SvRV(point_sv)) == SVt_PVMG)) {
         if (!sv_isa(point_sv, perl_class_name(point)) && !sv_isa(point_sv, perl_class_name_ref(point)))
             CONFESS("Not a valid %s object (got %s)", perl_class_name(point), HvNAME(SvSTASH(SvRV(point_sv))));
-        *point = *(Pointf*)SvIV((SV*)SvRV( point_sv ));
+        *point = *(Vec2d*)SvIV((SV*)SvRV( point_sv ));
         return true;
     } else {
         return from_SV(point_sv, point);
@@ -593,6 +745,7 @@ SV* to_SV(TriangleMesh* THIS)
     return sv;
 }
 
+<<<<<<< HEAD
 SV*
 polynode_children_2_perl(const ClipperLib::PolyNode& node)
 {
@@ -619,5 +772,7 @@ polynode2perl(const ClipperLib::PolyNode& node)
     return (SV*)newRV_noinc((SV*)hv);
 }
 
+=======
+>>>>>>> origin/merill-merge
 }
 #endif
