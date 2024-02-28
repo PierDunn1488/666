@@ -2,7 +2,13 @@
 package Slic3r::Model;
 
 use List::Util qw(first max any);
+<<<<<<< HEAD
+<<<<<<< HEAD
 use Slic3r::Geometry qw(X Y Z move_points);
+=======
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
 
 sub merge {
     my $class = shift;
@@ -63,9 +69,7 @@ sub apply {
 # Extends C++ class Slic3r::ModelObject
 package Slic3r::Model::Object;
 
-use File::Basename qw(basename);
 use List::Util qw(first sum);
-use Slic3r::Geometry qw(X Y Z rad2deg);
 
 sub add_volume {
     my $self = shift;
@@ -115,7 +119,6 @@ sub add_volume {
 
 sub add_instance {
     my $self = shift;
-    my %params = @_;
     
     if (@_ == 1) {
         # we have a Model::Instance
@@ -126,9 +129,9 @@ sub add_instance {
         
         my $new_instance = $self->_add_instance;
         
-        $new_instance->set_rotation($args{rotation})
+        $new_instance->set_rotations($args{rotation})
             if defined $args{rotation};
-        $new_instance->set_scaling_factor($args{scaling_factor})
+        $new_instance->set_scaling_factors($args{scaling_factor})
             if defined $args{scaling_factor};
         $new_instance->set_offset($args{offset})
             if defined $args{offset};
@@ -137,4 +140,17 @@ sub add_instance {
     }
 }
 
+<<<<<<< HEAD
+=======
+sub mesh_stats {
+    my $self = shift;
+    
+    # TODO: sum values from all volumes
+    return $self->volumes->[0]->mesh->stats;
+}
+
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
 1;

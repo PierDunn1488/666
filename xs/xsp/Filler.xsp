@@ -3,7 +3,13 @@
 %{
 #include <xsinit.h>
 #include "libslic3r/Fill/Fill.hpp"
+<<<<<<< HEAD
+<<<<<<< HEAD
 #include "libslic3r/PolylineCollection.hpp"
+=======
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
 #include "libslic3r/ExtrusionEntity.hpp"
 #include "libslic3r/ExtrusionEntityCollection.hpp"
 %}
@@ -12,6 +18,8 @@
     ~Filler();
 
     void set_bounding_box(BoundingBox *bbox)
+<<<<<<< HEAD
+<<<<<<< HEAD
         %code{% THIS->fill->bounding_box = *bbox; %};
     
     void set_min_spacing(coordf_t spacing)
@@ -27,6 +35,18 @@
     float endpoints_overlap()
         %code{% RETVAL = THIS->fill->endpoints_overlap; %};
     
+=======
+=======
+>>>>>>> origin/merill-merge
+        %code{% THIS->fill->set_bounding_box(*bbox); %};
+    void set_spacing(coordf_t spacing)
+        %code{% THIS->fill->spacing = spacing; %};
+    coordf_t spacing()
+        %code{% RETVAL = THIS->fill->spacing; %};
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
     void set_layer_id(size_t layer_id)
         %code{% THIS->fill->layer_id = layer_id; %};
     void set_z(coordf_t z)
@@ -44,6 +64,8 @@
         %code{% RETVAL = THIS->fill->no_sort(); %};
 
     void set_density(float density)
+<<<<<<< HEAD
+<<<<<<< HEAD
         %code{% THIS->fill->density = density; %};
     void set_dont_connect(bool dont_connect)
         %code{% THIS->fill->dont_connect = dont_connect; %};
@@ -51,13 +73,31 @@
         %code{% THIS->fill->dont_adjust = dont_adjust; %};
     void set_complete(bool complete)
         %code{% THIS->fill->complete = complete; %};
+=======
+        %code{% THIS->params.density = density; %};
+    void set_dont_adjust(bool dont_adjust)
+        %code{% THIS->params.dont_adjust = dont_adjust; %};
+>>>>>>> origin/merill-merge
+=======
+        %code{% THIS->params.density = density; %};
+    void set_dont_adjust(bool dont_adjust)
+        %code{% THIS->params.dont_adjust = dont_adjust; %};
+>>>>>>> origin/merill-merge
 
     PolylineCollection* _fill_surface(Surface *surface)
         %code{% 
             PolylineCollection *pc = NULL;
             if (THIS->fill != NULL) {
                 pc = new PolylineCollection();
+<<<<<<< HEAD
+<<<<<<< HEAD
                 pc->polylines = THIS->fill->fill_surface(*surface);
+=======
+                pc->polylines = THIS->fill->fill_surface(surface, THIS->params);
+>>>>>>> origin/merill-merge
+=======
+                pc->polylines = THIS->fill->fill_surface(surface, THIS->params);
+>>>>>>> origin/merill-merge
             }
             RETVAL =  pc;
         %};

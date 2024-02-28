@@ -7,8 +7,14 @@ plan tests => 34;
 BEGIN {
     use FindBin;
     use lib "$FindBin::Bin/../lib";
+<<<<<<< HEAD
+<<<<<<< HEAD
     use lib "$FindBin::Bin/../lib";
     use lib "$FindBin::Bin/../lib";
+=======
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
     use local::lib "$FindBin::Bin/../local-lib";
 }
 

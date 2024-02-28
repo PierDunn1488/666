@@ -10,7 +10,7 @@ BEGIN {
 
 use List::Util qw(first sum);
 use Slic3r;
-use Slic3r::Geometry qw(scale epsilon deg2rad rad2deg PI);
+use Slic3r::Geometry qw(scale epsilon deg2rad rad2deg);
 use Slic3r::Test;
 
 {
@@ -74,7 +74,7 @@ use Slic3r::Test;
     );
     my $lower = [
         Slic3r::ExPolygon->new(
-            Slic3r::Polygon->new_scale([10,10],[10,20],[20,20],[20,30],[0,30],[0,10]),
+            Slic3r::Polygon->new_scale([10,10],[10,20],[20,20],[30,30],[0,30],[0,0]),
         ),
     ];
     $_->translate(scale 20, scale 20) for $bridge, @$lower; # avoid negative coordinates for easier SVG preview
@@ -145,7 +145,7 @@ sub check_angle {
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('top_solid_layers', 0);            # to prevent bridging on sparse infill
     $config->set('bridge_speed', 99);
     

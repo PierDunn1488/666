@@ -54,13 +54,14 @@ plan tests => 8;
             'infill is only present in correct number of layers';
     };
     
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('layer_height', 0.2);
     $config->set('first_layer_height', 0.2);
-    $config->set('nozzle_diameter', [0.5]);
+    $config->set('nozzle_diameter', [0.5,0.5,0.5,0.5]);
     $config->set('infill_every_layers', 2);
     $config->set('perimeter_extruder', 1);
     $config->set('infill_extruder', 2);
+    $config->set('wipe_into_infill', 0);
     $config->set('support_material_extruder', 3);
     $config->set('support_material_interface_extruder', 3);
     $config->set('top_solid_layers', 0);
@@ -73,7 +74,7 @@ plan tests => 8;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('layer_height', 0.2);
     $config->set('first_layer_height', 0.2);
     $config->set('nozzle_diameter', [0.5]);
@@ -88,7 +89,7 @@ plan tests => 8;
     
     # we disable combination after infill has been generated
     $config->set('infill_every_layers', 1);
-    $print->apply_config($config);
+    $print->apply($print->print->model->clone, $config);
     $print->process;
     
     ok !(defined first { @{$_->get_region(0)->fill_surfaces} == 0 }
@@ -98,7 +99,7 @@ plan tests => 8;
 
 # the following needs to be adapted to the new API
 if (0) {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('skirts', 0);
     $config->set('solid_layers', 0);
     $config->set('bottom_solid_layers', 0);

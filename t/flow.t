@@ -14,7 +14,7 @@ use Slic3r::Geometry qw(scale PI);
 use Slic3r::Test;
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('skirts', 1);
     $config->set('brim_width', 2);
     $config->set('perimeters', 3);
@@ -22,6 +22,8 @@ use Slic3r::Test;
     $config->set('bottom_solid_layers', 1);
     $config->set('first_layer_extrusion_width', 2);
     $config->set('first_layer_height', '100%');
+    $config->set('filament_diameter', [ 3.0 ]);
+    $config->set('nozzle_diameter', [ 0.5 ]);
     
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
     my @E_per_mm = ();
@@ -41,10 +43,11 @@ use Slic3r::Test;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
     $config->set('bridge_speed', 99);
     $config->set('bridge_flow_ratio', 1);
-    $config->set('cooling', 0);                 # to prevent speeds from being altered
+    $config->set('over_bridge_flow_ratio', 1);
+    $config->set('cooling', [ 0 ]);             # to prevent speeds from being altered
     $config->set('first_layer_speed', '100%');  # to prevent speeds from being altered
     
     my $test = sub {

@@ -4,6 +4,21 @@ use strict;
 
 our $VERSION = '0.01';
 
+# We have to load these modules in order to have Wx.pm find the correct paths
+# for wxWidgets dlls on MSW.
+# We avoid loading these on OS X because Wx::Load() initializes a Wx App
+# automatically and it steals focus even when we're not running Slic3r in GUI mode.
+# TODO: only load these when compiling with GUI support
+BEGIN {
+    if ($^O eq 'MSWin32') {
+        eval "use Wx";
+        eval "use Wx::GLCanvas";
+        eval "use Wx::GLContext";
+        eval "use Wx::Html";
+        eval "use Wx::Print";  # because of some Wx bug, thread creation fails if we don't have this (looks like Wx::Printout is hard-coded in some thread cleanup code)
+    }
+}
+
 use Carp qw();
 use XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
@@ -17,16 +32,6 @@ package Slic3r::Point;
 use overload
     '@{}' => sub { $_[0]->arrayref },
     'fallback' => 1;
-
-package Slic3r::Point3;
-use overload
-    '@{}' => sub { [ $_[0]->x, $_[0]->y, $_[0]->z ] },  #,
-    'fallback' => 1;
-
-sub pp {
-    my ($self) = @_;
-    return [ @$self ];
-}
 
 package Slic3r::Pointf;
 use overload
@@ -94,6 +99,11 @@ sub new_from_paths {
     return $loop;
 }
 
+package Slic3r::ExtrusionMultiPath;
+use overload
+    '@{}' => sub { $_[0]->arrayref },
+    'fallback' => 1;
+
 package Slic3r::ExtrusionPath;
 use overload
     '@{}' => sub { $_[0]->arrayref },
@@ -123,12 +133,34 @@ sub clone {
     );
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/merill-merge
+package Slic3r::ExtrusionSimulator;
+
+sub new {
+    my ($class, %args) = @_;
+    return $class->_new();
+}
+
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
 package Slic3r::Filler;
 
 sub fill_surface {
     my ($self, $surface, %args) = @_;
     $self->set_density($args{density}) if defined($args{density});
+<<<<<<< HEAD
+<<<<<<< HEAD
     $self->set_dont_connect($args{dont_connect}) if defined($args{dont_connect});
+=======
+>>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
     $self->set_dont_adjust($args{dont_adjust}) if defined($args{dont_adjust});
     $self->set_complete($args{complete}) if defined($args{complete});
     return $self->_fill_surface($surface);
@@ -151,14 +183,6 @@ sub new_from_width {
     
     return $class->_new_from_width(
         @args{qw(role width nozzle_diameter layer_height bridge_flow_ratio)},
-    );
-}
-
-sub new_from_spacing {
-    my ($class, %args) = @_;
-    
-    return $class->_new_from_spacing(
-        @args{qw(spacing nozzle_diameter layer_height bridge)},
     );
 }
 
@@ -207,8 +231,30 @@ sub new {
     return $self;
 }
 
-package Slic3r::GUI::_3DScene::GLVertexArray;
-sub CLONE_SKIP { 1 }
+package Slic3r::Print::SupportMaterial2;
+
+sub new {
+    my ($class, %args) = @_;
+    
+    return $class->_new(
+        $args{print_config},        # required
+        $args{object_config},       # required
+        $args{first_layer_flow},    # required
+        $args{flow},                # required
+        $args{interface_flow},      # required
+        $args{soluble_interface}    // 0
+    );
+}
+
+package Slic3r::GUI::_3DScene::GLVolume::Collection;
+use overload
+    '@{}' => sub { $_[0]->arrayref },
+    'fallback' => 1;
+
+package Slic3r::GUI::PresetCollection;
+use overload
+    '@{}' => sub { $_[0]->arrayref },
+    'fallback' => 1;
 
 package main;
 for my $class (qw(
@@ -222,21 +268,30 @@ for my $class (qw(
         Slic3r::Config::Static
         Slic3r::ExPolygon
         Slic3r::ExPolygon::Collection
-        Slic3r::Extruder
         Slic3r::ExtrusionLoop
+        Slic3r::ExtrusionMultiPath
         Slic3r::ExtrusionPath
         Slic3r::ExtrusionPath::Collection
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        Slic3r::ExtrusionSimulator
+>>>>>>> origin/merill-merge
+=======
+        Slic3r::ExtrusionSimulator
+>>>>>>> origin/merill-merge
         Slic3r::Filler
         Slic3r::Flow
         Slic3r::GCode
-        Slic3r::GCode::AvoidCrossingPerimeters
-        Slic3r::GCode::OozePrevention
         Slic3r::GCode::PlaceholderParser
-        Slic3r::GCode::Wipe
-        Slic3r::GCode::Writer
         Slic3r::Geometry::BoundingBox
         Slic3r::Geometry::BoundingBoxf
         Slic3r::Geometry::BoundingBoxf3
+        Slic3r::GUI::_3DScene::GLShader        
+        Slic3r::GUI::_3DScene::GLVolume
+        Slic3r::GUI::Preset
+        Slic3r::GUI::PresetCollection
+        Slic3r::GUI::Tab
         Slic3r::Layer
         Slic3r::Layer::Region
         Slic3r::Layer::Support
@@ -262,6 +317,7 @@ for my $class (qw(
         Slic3r::SlicingAdaptive
         Slic3r::Surface
         Slic3r::Surface::Collection
+        Slic3r::Print::SupportMaterial2
         Slic3r::TriangleMesh
         Slic3r::TransformationMatrix
     ))

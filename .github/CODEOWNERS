@@ -1,4 +1,16 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
 *   @alranel @lordofhyphens
 
 src/gui/* @lordofhyphens
 .github/CODEOWNERS @alranel @lordofhyphens
+=======
+*  @lordofhyphens @supermerill
+
+.github/CODEOWNERS @lordofhyphens
+>>>>>>> origin/merill-merge
+=======
+*  @lordofhyphens @supermerill
+
+.github/CODEOWNERS @lordofhyphens
+>>>>>>> origin/merill-merge

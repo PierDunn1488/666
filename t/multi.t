@@ -15,9 +15,19 @@ use Slic3r::Geometry::Clipper qw(offset);
 use Slic3r::Test;
 
 {
+<<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
     $config->set('layer_height', 0.3);
     $config->set('first_layer_height', 0.35);
+=======
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
+>>>>>>> origin/merill-merge
+=======
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
+>>>>>>> origin/merill-merge
     $config->set('raft_layers', 2);
     $config->set('infill_extruder', 2);
     $config->set('solid_infill_extruder', 3);
@@ -26,9 +36,21 @@ use Slic3r::Test;
     $config->set('extruder_offset', [ [0,0], [20,0], [0,20], [20,20] ]);
     $config->set('temperature', [200, 180, 170, 160]);
     $config->set('first_layer_temperature', [206, 186, 166, 156]);
+<<<<<<< HEAD
+<<<<<<< HEAD
     $config->set('standby_temperature_delta', -5);
     $config->set('toolchange_gcode', ';toolchange');  # test that it doesn't crash when this is supplied
     $config->set('skirts', 2);  # test correct temperatures are applied to skirt as well
+=======
+    $config->set('toolchange_gcode', 'T[next_extruder] ;toolchange');  # test that it doesn't crash when this is supplied
+    # Since July 2019, PrusaSlicer only emits automatic Tn command in case that the toolchange_gcode is empty
+    # The "T[next_extruder]" is therefore needed in this test.
+>>>>>>> origin/merill-merge
+=======
+    $config->set('toolchange_gcode', 'T[next_extruder] ;toolchange');  # test that it doesn't crash when this is supplied
+    # Since July 2019, PrusaSlicer only emits automatic Tn command in case that the toolchange_gcode is empty
+    # The "T[next_extruder]" is therefore needed in this test.
+>>>>>>> origin/merill-merge
     
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
     
@@ -104,7 +126,8 @@ use Slic3r::Test;
 }
 
 {
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('support_material_extruder', 3);
     
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
@@ -113,6 +136,7 @@ use Slic3r::Test;
 
 {
     my $config = Slic3r::Config->new;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('extruder', 2);
     
     my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
@@ -121,6 +145,7 @@ use Slic3r::Test;
 
 {
     my $config = Slic3r::Config->new;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('perimeter_extruder', 2);
     $config->set('infill_extruder', 2);
     $config->set('support_material_extruder', 2);
@@ -141,11 +166,12 @@ use Slic3r::Test;
     $upper_config->set('extruder', 2);
     $upper_config->set('bottom_solid_layers', 1);
     $upper_config->set('top_solid_layers', 0);
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('fill_density', 0);
     $config->set('solid_infill_speed', 99);
     $config->set('top_solid_infill_speed', 99);
-    $config->set('cooling', 0);                 # for preventing speeds from being altered
+    $config->set('cooling', [ 0 ]);             # for preventing speeds from being altered
     $config->set('first_layer_speed', '100%');  # for preventing speeds from being altered
     
     my $test = sub {
@@ -187,7 +213,8 @@ use Slic3r::Test;
     my $model = stacked_cubes();
     my $object = $model->objects->[0];
     
-    my $config = Slic3r::Config->new_from_defaults;
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
     $config->set('layer_height', 0.4);
     $config->set('first_layer_height', '100%');
     $config->set('skirts', 0);
