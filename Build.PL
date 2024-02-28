@@ -14,12 +14,15 @@ use File::Spec;
 my %prereqs = qw(
     Devel::CheckLib                 0
 <<<<<<< HEAD
+<<<<<<< HEAD
     Encode                          0
     Encode::Locale                  1.05
     ExtUtils::CppGuess              0
     ExtUtils::MakeMaker             6.80
     ExtUtils::ParseXS               3.35
 =======
+=======
+>>>>>>> origin/merill-merge
     ExtUtils::MakeMaker             6.80
     ExtUtils::ParseXS               3.22
     ExtUtils::XSpp                  0
@@ -27,6 +30,9 @@ my %prereqs = qw(
     ExtUtils::CppGuess              0
     ExtUtils::Typemaps              0
     ExtUtils::Typemaps::Basic       0
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     File::Basename                  0
     File::Spec                      0
@@ -102,6 +108,9 @@ EOF
     
 =======
 
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     # install local::lib without --local-lib otherwise it's not usable afterwards
     if (!eval "use local::lib qw(local-lib); 1") {
@@ -111,8 +120,13 @@ EOF
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     push @cpanm_args, ('--local-lib', 'local-lib');
     
+=======
+    push @cpanm_args, ('--local-lib', 'local-lib') if ! $nolocal;
+
+>>>>>>> origin/merill-merge
 =======
     push @cpanm_args, ('--local-lib', 'local-lib') if ! $nolocal;
 
@@ -128,7 +142,11 @@ EOF
         # temporary workaround for upstream bug in test
         push @cmd, '--notest'
 <<<<<<< HEAD
+<<<<<<< HEAD
             if $module =~ /^(?:OpenGL|Math::PlanePath|Test::Harness|IO::Scalar)$/;
+=======
+            if $module =~ /^(?:OpenGL|Test::Harness)$/;
+>>>>>>> origin/merill-merge
 =======
             if $module =~ /^(?:OpenGL|Test::Harness)$/;
 >>>>>>> origin/merill-merge
@@ -139,6 +157,10 @@ EOF
 
         push @cmd, "$module~$version";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/merill-merge
 =======
 
 >>>>>>> origin/merill-merge

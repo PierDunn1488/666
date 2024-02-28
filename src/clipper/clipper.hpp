@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/clipper.hpp
 /*******************************************************************************
 *                                                                              *
@@ -406,6 +407,8 @@ class clipperException : public std::exception
 
 
 =======
+=======
+>>>>>>> origin/merill-merge
 /*******************************************************************************
 *                                                                              *
 * Author    :  Angus Johnson                                                   *
@@ -899,4 +902,7 @@ class clipperException : public std::exception
 #endif //clipper_hpp
 
 
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/clipper/clipper.hpp
+=======
+>>>>>>> origin/merill-merge

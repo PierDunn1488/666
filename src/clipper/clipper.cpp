@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/clipper.cpp
 /*******************************************************************************
 *                                                                              *
@@ -4629,6 +4630,8 @@ std::ostream& operator <<(std::ostream &s, const Paths &p)
 
 } //ClipperLib namespace
 =======
+=======
+>>>>>>> origin/merill-merge
 /*******************************************************************************
 *                                                                              *
 * Author    :  Angus Johnson                                                   *
@@ -8863,4 +8866,7 @@ std::ostream& operator <<(std::ostream &s, const Paths &p)
 //------------------------------------------------------------------------------
 
 } //ClipperLib namespace
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/clipper/clipper.cpp
+=======
+>>>>>>> origin/merill-merge

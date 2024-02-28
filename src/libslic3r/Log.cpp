@@ -8,11 +8,15 @@
 #include <boost/locale.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/Log.cpp
 #include "Log.hpp"
 =======
 #include "libslic3r/Log.hpp"
 >>>>>>> origin/merill-merge:src/libslic3r/Log.cpp
+=======
+#include "libslic3r/Log.hpp"
+>>>>>>> origin/merill-merge
 
 /// Local class to suppress output
 class NullStream : public std::streambuf
@@ -168,11 +172,15 @@ std::ostream& _Log::debug(const char topic[], bool multiline) {
 }
 
 std::ostream& _Log::debug(const std::string& topic, bool multiline) {
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/Log.cpp
     if (this->_has_log_level(log_t::DEBUG) && this->_has_topic(topic)) {
 =======
     if (this->_has_log_level(log_t::DBG) && this->_has_topic(topic)) {
 >>>>>>> origin/merill-merge:src/libslic3r/Log.cpp
+=======
+    if (this->_has_log_level(log_t::DBG) && this->_has_topic(topic)) {
+>>>>>>> origin/merill-merge
         if (!multiline)
             _out << topic << std::setfill(' ') << std::setw(6) << "DEBUG" << ": ";
         return _out;
@@ -207,11 +215,15 @@ void _Log::set_level(log_t level) {
         this->_log_level.insert(log_t::ERR);
         this->_log_level.insert(log_t::WARN);
         this->_log_level.insert(log_t::INFO);
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/Log.cpp
         this->_log_level.insert(log_t::DEBUG);
 =======
         this->_log_level.insert(log_t::DBG);
 >>>>>>> origin/merill-merge:src/libslic3r/Log.cpp
+=======
+        this->_log_level.insert(log_t::DBG);
+>>>>>>> origin/merill-merge
     } else {
         this->_log_level.insert(level);
     }

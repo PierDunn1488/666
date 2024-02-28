@@ -24,8 +24,11 @@ public:
     explicit operator ExPolygons&();
     void scale(double factor);
     void translate(double x, double y);
+<<<<<<< HEAD
     void translate(const Point offset) { translate(static_cast<coordf_t>(offset.x), static_cast<coordf_t>(offset.y)); }
     void translate(const Pointf offset) { translate(offset.x, offset.y); }
+=======
+>>>>>>> origin/merill-merge
     void rotate(double angle, const Point &center);
     template <class T> bool contains(const T &item) const;
     bool contains_b(const Point &point) const;
@@ -33,6 +36,7 @@ public:
     Polygon convex_hull() const;
     Lines lines() const;
     Polygons contours() const;
+<<<<<<< HEAD
     Polygons holes() const;
     void append(const ExPolygons &expolygons);
     void append(const ExPolygon &expolygons);
@@ -58,6 +62,9 @@ inline ExPolygonCollection&
 operator <<(ExPolygonCollection &coll, const ExPolygons &expolygons) {
     coll.append(expolygons);
     return coll;
+=======
+    void append(const ExPolygons &expolygons);
+>>>>>>> origin/merill-merge
 };
 
 extern BoundingBox get_extents(const ExPolygonCollection &expolygon);

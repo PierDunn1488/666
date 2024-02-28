@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Test::More tests => 27;
+=======
+use Test::More tests => 24;
+>>>>>>> origin/merill-merge
 =======
 use Test::More tests => 24;
 >>>>>>> origin/merill-merge
@@ -243,6 +247,7 @@ use Slic3r::Test;
         }
         if ($cmd eq 'M204' && exists $args->{S}) {
             $has_m204 = 1;
+<<<<<<< HEAD
         }
     });
     ok $has_accel, 'M201 is generated for repetier firmware.';
@@ -317,6 +322,12 @@ use Slic3r::Test;
     });
     
     ok $had_gcode, 'M190/M140 codes are generated if has_heatbed = 1';
+=======
+        }
+    });
+    ok $has_accel, 'M201 is generated for repetier firmware.';
+    ok !$has_m204, 'M204 is not generated for repetier firmware';
+>>>>>>> origin/merill-merge
 }
 
 __END__

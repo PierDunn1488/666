@@ -1,6 +1,9 @@
 # This package loads all the non-GUI Slic3r perl packages.
 <<<<<<< HEAD
+<<<<<<< HEAD
 # In addition, it implements utility functions for file handling and threading.
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 
@@ -16,7 +19,12 @@ require v5.10;
 
 our $VERSION = VERSION();
 <<<<<<< HEAD
+<<<<<<< HEAD
 our $GITVERSION = GITVERSION();
+=======
+our $BUILD = BUILD();
+our $FORK_NAME = FORK_NAME();
+>>>>>>> origin/merill-merge
 =======
 our $BUILD = BUILD();
 our $FORK_NAME = FORK_NAME();
@@ -30,6 +38,7 @@ sub debugf {
 our $loglevel = 0;
 
 BEGIN {
+<<<<<<< HEAD
 <<<<<<< HEAD
     # Test, whether the perl was compiled with ithreads support and ithreads actually work.
     use Config;
@@ -64,11 +73,21 @@ our $var = sub { "$varpath/$_[0]" };
 }
 
 use FindBin;
+=======
+    $debug = 1 if (defined($ENV{'SLIC3R_DEBUGOUT'}) && $ENV{'SLIC3R_DEBUGOUT'} == 1);
+    print "Debugging output enabled\n" if $debug;
+}
+
+use FindBin;
+>>>>>>> origin/merill-merge
 
 # Let the XS module know where the GUI resources reside.
 set_resources_dir(decode_path($FindBin::Bin) . (($^O eq 'darwin') ? '/../Resources' : '/resources'));
 set_var_dir(resources_dir() . "/icons");
 set_local_dir(resources_dir() . "/localization/");
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 
 use Moo 1.003001;
@@ -80,12 +99,16 @@ use Slic3r::ExtrusionLoop;
 use Slic3r::ExtrusionPath;
 use Slic3r::Flow;
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Slic3r::GCode::ArcFitting;
 use Slic3r::GCode::MotionPlanner;
 use Slic3r::GCode::PressureRegulator;
 use Slic3r::GCode::Reader;
 use Slic3r::GCode::VibrationLimit;
 use Slic3r::Geometry qw(PI);
+=======
+use Slic3r::GCode::Reader;
+>>>>>>> origin/merill-merge
 =======
 use Slic3r::GCode::Reader;
 >>>>>>> origin/merill-merge
@@ -103,6 +126,7 @@ our $build = eval "use Slic3r::Build; 1";
 # Scaling between the float and integer coordinates.
 # Floats are in mm.
 use constant SCALING_FACTOR         => 0.000001;
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Resolution to simplify perimeters to. These constants are now used in C++ code only. Better to publish them to Perl from the C++ code.
 # use constant RESOLUTION             => 0.0125;
@@ -358,6 +382,17 @@ set_logging_level($Slic3r::loglevel);
 Slic3r::GCode::PlaceholderParser->new->evaluate_boolean_expression('1==1');
 >>>>>>> origin/merill-merge
 
+=======
+
+# Set the logging level at the Slic3r XS module.
+$Slic3r::loglevel = (defined($ENV{'SLIC3R_LOGLEVEL'}) && $ENV{'SLIC3R_LOGLEVEL'} =~ /^[1-9]/) ? $ENV{'SLIC3R_LOGLEVEL'} : 0;
+set_logging_level($Slic3r::loglevel);
+
+# Let the palceholder parser evaluate one expression to initialize its local static macro_processor 
+# class instance in a thread safe manner.
+Slic3r::GCode::PlaceholderParser->new->evaluate_boolean_expression('1==1');
+
+>>>>>>> origin/merill-merge
 # Open a file by converting $filename to local file system locales.
 sub open {
     my ($fh, $mode, $filename) = @_;

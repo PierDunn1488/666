@@ -1,12 +1,16 @@
 #ifndef slic3r_Fill_hpp_
 #define slic3r_Fill_hpp_
 
+<<<<<<< HEAD
 #include <assert.h>
+=======
+>>>>>>> origin/merill-merge
 #include <memory.h>
 #include <float.h>
 #include <stdint.h>
 
 #include "../libslic3r.h"
+<<<<<<< HEAD
 #include "../BoundingBox.hpp"
 #include "../ExPolygon.hpp"
 #include "../Polyline.hpp"
@@ -118,6 +122,32 @@ protected:
     direction_t _infill_direction(const Surface &surface) const;
 };
 
+=======
+#include "../PrintConfig.hpp"
+
+#include "FillBase.hpp"
+
+namespace Slic3r {
+
+class ExtrusionEntityCollection;
+class LayerRegion;
+
+// An interface class to Perl, aggregating an instance of a Fill and a FillData.
+class Filler
+{
+public:
+    Filler() : fill(nullptr) {}
+    ~Filler() { 
+        delete fill; 
+        fill = nullptr;
+    }
+    Fill        *fill;
+    FillParams   params;
+};
+
+void make_fill(LayerRegion &layerm, ExtrusionEntityCollection &out);
+
+>>>>>>> origin/merill-merge
 } // namespace Slic3r
 
 #endif // slic3r_Fill_hpp_

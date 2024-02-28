@@ -91,6 +91,7 @@ use Slic3r::Test;
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
     $config->set('skirts', 0);
     $config->set('brim_width', 5);
@@ -125,6 +126,11 @@ use Slic3r::Test;
 
 {
     my $config = Slic3r::Config->new_from_defaults;
+=======
+    my $config = Slic3r::Config::new_from_defaults;
+    # Define 4 extruders.
+    $config->set('nozzle_diameter', [0.4, 0.4, 0.4, 0.4]);
+>>>>>>> origin/merill-merge
 =======
     my $config = Slic3r::Config::new_from_defaults;
     # Define 4 extruders.

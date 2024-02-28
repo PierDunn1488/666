@@ -5,8 +5,12 @@ use warnings;
 
 use Slic3r::XS;
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Test::More tests => 159;
 use Data::Dumper;
+=======
+use Test::More tests => 147;
+>>>>>>> origin/merill-merge
 =======
 use Test::More tests => 147;
 >>>>>>> origin/merill-merge
@@ -65,7 +69,11 @@ foreach my $config (Slic3r::Config->new, Slic3r::Config::Static::new_FullPrintCo
     {    
         $config->set('filament_notes', $test_data->{values});
 <<<<<<< HEAD
+<<<<<<< HEAD
         is $config->serialize('filament_notes'), $test_data->{serialized}, 'serialize multi-string value ' . $test_data->{name};
+=======
+        is $config->opt_serialize('filament_notes'), $test_data->{serialized}, 'serialize multi-string value ' . $test_data->{name};
+>>>>>>> origin/merill-merge
 =======
         is $config->opt_serialize('filament_notes'), $test_data->{serialized}, 'serialize multi-string value ' . $test_data->{name};
 >>>>>>> origin/merill-merge
@@ -115,8 +123,12 @@ foreach my $config (Slic3r::Config->new, Slic3r::Config::Static::new_FullPrintCo
     $config->set('extruder_offset', [Slic3r::Pointf->new(10,20),Slic3r::Pointf->new(30,45)]);
     is_deeply [ map $_->pp, @{$config->get('extruder_offset')} ], [[10,20],[30,45]], 'set/get points';
 <<<<<<< HEAD
+<<<<<<< HEAD
     $config->set_deserialize('extruder_offset', $config->serialize('extruder_offset'));
     is $config->serialize('extruder_offset'), '10x20,30x45', 'serialize points';
+=======
+    is $config->opt_serialize('extruder_offset'), '10x20,30x45', 'serialize points';
+>>>>>>> origin/merill-merge
 =======
     is $config->opt_serialize('extruder_offset'), '10x20,30x45', 'serialize points';
 >>>>>>> origin/merill-merge
@@ -258,6 +270,7 @@ foreach my $config (Slic3r::Config->new, Slic3r::Config::Static::new_FullPrintCo
     use Cwd qw(abs_path);
     use File::Basename qw(dirname);
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $class = Slic3r::Config->new;
     my $path = abs_path($0);
     my $config = $class->_load(dirname($path)."/inc/22_config_bad_config_options.ini");
@@ -307,10 +320,15 @@ foreach my $config (Slic3r::Config->new, Slic3r::Config::Static::new_FullPrintCo
 }
 
 =======
+=======
+>>>>>>> origin/merill-merge
     my $path = abs_path($0);
     my $config = Slic3r::Config::load(dirname($path)."/inc/22_config_bad_config_options.ini");
     ok 1, 'did not crash on reading invalid items in config';
 }
 
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 __END__

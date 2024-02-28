@@ -1,26 +1,35 @@
 #include <exception>
 
 #include "miniz_extension.hpp"
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/miniz_extension.cpp
 #include "Exception.hpp"
 =======
 >>>>>>> origin/merill-merge:src/libslic3r/miniz_extension.cpp
+=======
+>>>>>>> origin/merill-merge
 
 #if defined(_MSC_VER) || defined(__MINGW64__)
 #include "boost/nowide/cstdio.hpp"
 #endif
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/miniz_extension.cpp
 //! macro used to mark string used at localization,
 //! return same string
 #define L(s) s
 =======
+=======
+>>>>>>> origin/merill-merge
 #include "I18N.hpp"
 
 //! macro used to mark string used at localization,
 //! return same string
 #define L(s) Slic3r::I18N::translate(s)
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/miniz_extension.cpp
+=======
+>>>>>>> origin/merill-merge
 
 namespace Slic3r {
 
@@ -48,20 +57,27 @@ bool open_zip(mz_zip_archive *zip, const char *fname, bool isread)
     if (isread)
     {
         res = mz_zip_reader_init_cfile(zip, f, 0, 0);
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/miniz_extension.cpp
         if (!res) {
 =======
         if (!res)
 >>>>>>> origin/merill-merge:src/libslic3r/miniz_extension.cpp
+=======
+        if (!res)
+>>>>>>> origin/merill-merge
             // if we get here it means we tried to open a non-zip file
             // we need to close the file here because the call to mz_zip_get_cfile() made into close_zip() returns a null pointer
             // see: https://github.com/prusa3d/PrusaSlicer/issues/3536
             fclose(f);
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/miniz_extension.cpp
             throw Slic3r::FileIOError("Tried to open a non-zip file.");
         }
 =======
 >>>>>>> origin/merill-merge:src/libslic3r/miniz_extension.cpp
+=======
+>>>>>>> origin/merill-merge
     }
     else
         res = mz_zip_writer_init_cfile(zip, f, 0);

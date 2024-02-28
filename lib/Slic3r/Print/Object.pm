@@ -23,6 +23,7 @@ sub support_layers {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 sub generate_support_material {
     my $self = shift;
     
@@ -72,6 +73,8 @@ sub _support_material {
     );
 }
 
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 1;

@@ -16,9 +16,14 @@ use Slic3r::Test;
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
     $config->set('layer_height', 0.3);
     $config->set('first_layer_height', 0.35);
+=======
+    my $config = Slic3r::Config::new_from_defaults;
+    $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
+>>>>>>> origin/merill-merge
 =======
     my $config = Slic3r::Config::new_from_defaults;
     $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6]);
@@ -32,9 +37,15 @@ use Slic3r::Test;
     $config->set('temperature', [200, 180, 170, 160]);
     $config->set('first_layer_temperature', [206, 186, 166, 156]);
 <<<<<<< HEAD
+<<<<<<< HEAD
     $config->set('standby_temperature_delta', -5);
     $config->set('toolchange_gcode', ';toolchange');  # test that it doesn't crash when this is supplied
     $config->set('skirts', 2);  # test correct temperatures are applied to skirt as well
+=======
+    $config->set('toolchange_gcode', 'T[next_extruder] ;toolchange');  # test that it doesn't crash when this is supplied
+    # Since July 2019, PrusaSlicer only emits automatic Tn command in case that the toolchange_gcode is empty
+    # The "T[next_extruder]" is therefore needed in this test.
+>>>>>>> origin/merill-merge
 =======
     $config->set('toolchange_gcode', 'T[next_extruder] ;toolchange');  # test that it doesn't crash when this is supplied
     # Since July 2019, PrusaSlicer only emits automatic Tn command in case that the toolchange_gcode is empty

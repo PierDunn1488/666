@@ -2,11 +2,15 @@
 #define MINIZ_EXTENSION_HPP
 
 #include <string>
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/miniz_extension.hpp
 #include <miniz/miniz.h>
 =======
 #include <miniz.h>
 >>>>>>> origin/merill-merge:src/libslic3r/miniz_extension.hpp
+=======
+#include <miniz.h>
+>>>>>>> origin/merill-merge
 
 namespace Slic3r {
 

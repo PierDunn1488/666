@@ -24,6 +24,7 @@ our $Options = print_config_def();
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Fill in the underlying C++ Slic3r::DynamicPrintConfig with the content of the defaults
 # provided by the C++ class Slic3r::FullPrintConfig.
 sub new_from_defaults {
@@ -41,6 +42,9 @@ sub new_from_defaults {
 }
 
 # From command line parameters
+=======
+# From command line parameters, used by slic3r.pl
+>>>>>>> origin/merill-merge
 =======
 # From command line parameters, used by slic3r.pl
 >>>>>>> origin/merill-merge
@@ -84,6 +88,7 @@ sub new_from_cli {
     return $self;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 sub merge {
     my $class = shift;
@@ -375,6 +380,8 @@ sub read_ini {
     return $ini;
 }
 
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 package Slic3r::Config::Static;

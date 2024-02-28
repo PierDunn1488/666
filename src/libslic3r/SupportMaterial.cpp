@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SupportMaterial.cpp
 #include "SupportMaterial.hpp"
 #include "Log.hpp"
@@ -69,6 +70,8 @@ SupportMaterial::generate(PrintObject *object)
 {
     // Determine the top surfaces of the support, defined as:
 =======
+=======
+>>>>>>> origin/merill-merge
 #include "ClipperUtils.hpp"
 #include "ExtrusionEntityCollection.hpp"
 #include "Layer.hpp"
@@ -305,11 +308,15 @@ void PrintObjectSupportMaterial::generate(PrintObject &object)
     BOOST_LOG_TRIVIAL(info) << "Support generator - Creating top contacts";
 
     // Determine the top contact surfaces of the support, defined as:
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SupportMaterial.cpp
+=======
+>>>>>>> origin/merill-merge
     // contact = overhangs - clearance + margin
     // This method is responsible for identifying what contact surfaces
     // should the support material expose to the object in order to guarantee
     // that it will be effective, regardless of how it's built below.
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SupportMaterial.cpp
     pair<map<coordf_t, Polygons>, map<coordf_t, Polygons>> contact_overhang = contact_area(object);
     map<coordf_t, Polygons> &contact = contact_overhang.first;
@@ -1474,6 +1481,8 @@ SupportMaterial::create_circle(coordf_t radius)
 
 }
 =======
+=======
+>>>>>>> origin/merill-merge
     // If raft is to be generated, the 1st top_contact layer will contain the 1st object layer silhouette without holes.
     MyLayersPtr top_contacts = this->top_contact_layers(object, layer_storage);
     if (top_contacts.empty())
@@ -4745,4 +4754,7 @@ sub clip_with_shape {
 */
 
 } // namespace Slic3r
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SupportMaterial.cpp
+=======
+>>>>>>> origin/merill-merge

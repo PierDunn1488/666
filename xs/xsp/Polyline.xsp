@@ -85,7 +85,11 @@ Polyline::grow(delta, joinType = ClipperLib::jtSquare, miterLimit = 3)
     double                  miterLimit
     CODE:
 <<<<<<< HEAD
+<<<<<<< HEAD
         RETVAL = offset(*THIS, delta, scale, joinType, miterLimit);
+=======
+        RETVAL = offset(*THIS, delta, joinType, miterLimit);
+>>>>>>> origin/merill-merge
 =======
         RETVAL = offset(*THIS, delta, joinType, miterLimit);
 >>>>>>> origin/merill-merge

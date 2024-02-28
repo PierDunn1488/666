@@ -93,9 +93,15 @@
 %typemap{Ref<ExtrusionLoop>}{simple};
 %typemap{Clone<ExtrusionLoop>}{simple};
 <<<<<<< HEAD
+<<<<<<< HEAD
 %typemap{TransformationMatrix*};
 %typemap{Ref<TransformationMatrix>}{simple};
 %typemap{Clone<TransformationMatrix>}{simple};
+=======
+%typemap{ExtrusionSimulator*};
+%typemap{Ref<ExtrusionSimulator>}{simple};
+%typemap{Clone<ExtrusionSimulator>}{simple};
+>>>>>>> origin/merill-merge
 =======
 %typemap{ExtrusionSimulator*};
 %typemap{Ref<ExtrusionSimulator>}{simple};
@@ -162,10 +168,13 @@
 %typemap{CoolingBuffer*};
 %typemap{Ref<CoolingBuffer>}{simple};
 %typemap{Clone<CoolingBuffer>}{simple};
+<<<<<<< HEAD
 
 %typemap{CoolingBuffer*};
 %typemap{Ref<CoolingBuffer>}{simple};
 %typemap{Clone<CoolingBuffer>}{simple};
+=======
+>>>>>>> origin/merill-merge
 
 %typemap{GCode*};
 %typemap{Ref<GCode>}{simple};
@@ -212,10 +221,15 @@
 %typemap{Ref<ModelInstancePtrs>}{simple};
 %typemap{Clone<ModelInstancePtrs>}{simple};
 <<<<<<< HEAD
+<<<<<<< HEAD
 %typemap{GLVertexArray*};
 %typemap{SLAPrint*};
 %typemap{Ref<SLAPrint>}{simple};
 %typemap{Clone<SLAPrint>}{simple};
+=======
+%typemap{PresetHints*};
+%typemap{Ref<PresetHints>}{simple};
+>>>>>>> origin/merill-merge
 =======
 %typemap{PresetHints*};
 %typemap{Ref<PresetHints>}{simple};
@@ -227,8 +241,11 @@
 %typemap{SupportLayerPtrs*};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 %typemap{ClipperLib::JoinType}{simple};
 %typemap{ClipperLib::PolyFillType}{simple};
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 %typemap{Axis}{parsed}{

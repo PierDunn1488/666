@@ -1,4 +1,5 @@
 #include "SLAPrint.hpp"
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SLAPrint.cpp
 #include "ClipperUtils.hpp"
 #include "ExtrusionEntity.hpp"
@@ -351,6 +352,8 @@ SLAPrint::_SVG_path_d(const ExPolygon &expolygon) const
 
 }
 =======
+=======
+>>>>>>> origin/merill-merge
 #include "SLAPrintSteps.hpp"
 
 #include "ClipperUtils.hpp"
@@ -1626,4 +1629,7 @@ void SLAPrint::StatusReporter::operator()(SLAPrint &         p,
 }
 
 } // namespace Slic3r
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SLAPrint.cpp
+=======
+>>>>>>> origin/merill-merge

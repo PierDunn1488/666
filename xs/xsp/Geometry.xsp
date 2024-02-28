@@ -10,7 +10,11 @@
 %package{Slic3r::Geometry};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Pointfs arrange(size_t total_parts, Pointf* part, coordf_t dist, BoundingBoxf* bb = NULL)
+=======
+Pointfs arrange(size_t total_parts, Vec2d* part, coordf_t dist, BoundingBoxf* bb = NULL)
+>>>>>>> origin/merill-merge
 =======
 Pointfs arrange(size_t total_parts, Vec2d* part, coordf_t dist, BoundingBoxf* bb = NULL)
 >>>>>>> origin/merill-merge

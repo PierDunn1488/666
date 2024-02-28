@@ -84,6 +84,7 @@ my $cube = {
     $m->ReadFromPerl($cube->{vertices}, $cube->{facets});
     $m->repair;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     my $trafo = Slic3r::TransformationMatrix->new;
     $trafo->set_scale_uni(2);
@@ -98,6 +99,11 @@ my $cube = {
     $m->ReadFromPerl($cube->{vertices}, $cube->{facets});
     $m->repair;
     my @z = (0,2,4,8,6,8,10,12,14,16,18,20);
+=======
+    # The slice at zero height does not belong to the mesh, the slicing considers the vertical structures to be
+    # open intervals at the bottom end, closed at the top end.
+    my @z = (0.0001,2,4,8,6,8,10,12,14,16,18,20);
+>>>>>>> origin/merill-merge
 =======
     # The slice at zero height does not belong to the mesh, the slicing considers the vertical structures to be
     # open intervals at the bottom end, closed at the top end.

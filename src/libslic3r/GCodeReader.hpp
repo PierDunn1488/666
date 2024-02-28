@@ -6,14 +6,19 @@
 #include <cstdlib>
 #include <functional>
 #include <string>
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeReader.hpp
 =======
 #include <string_view>
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeReader.hpp
+=======
+#include <string_view>
+>>>>>>> origin/merill-merge
 #include "PrintConfig.hpp"
 
 namespace Slic3r {
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeReader.hpp
 class GCodeReader;
 class GCodeReader {
@@ -67,6 +72,8 @@ class GCodeReader {
     GCodeConfig _config;
     char _extrusion_axis;
 =======
+=======
+>>>>>>> origin/merill-merge
 class GCodeReader {
 public:
     class GCodeLine {
@@ -212,7 +219,10 @@ private:
     float       m_position[NUM_AXES];
     bool        m_verbose;
     bool        m_parsing_file{ false };
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeReader.hpp
+=======
+>>>>>>> origin/merill-merge
 };
 
 } /* namespace Slic3r */

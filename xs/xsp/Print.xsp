@@ -50,6 +50,7 @@ _constant()
     Ref<ModelObject> model_object();
     Ref<StaticPrintConfig> config()
 <<<<<<< HEAD
+<<<<<<< HEAD
         %code%{ RETVAL = &THIS->config; %};
     Points copies();
     t_layer_height_ranges layer_height_ranges()
@@ -90,10 +91,18 @@ _constant()
     void delete_layer(int idx);
     %name{support_material_flow} Clone<Flow> _support_material_flow(FlowRole role = frSupportMaterial);
 =======
+=======
+        %code%{ RETVAL = &THIS->config(); %};
+    Clone<BoundingBox> bounding_box();
+    
+    size_t layer_count();
+    Ref<Layer> get_layer(int idx);
+>>>>>>> origin/merill-merge
 
 >>>>>>> origin/merill-merge
     size_t support_layer_count();
     Ref<SupportLayer> get_support_layer(int idx);
+<<<<<<< HEAD
 <<<<<<< HEAD
     Ref<SupportLayer> add_support_layer(int id, coordf_t height, coordf_t print_z);
     void delete_support_layer(int idx);
@@ -142,6 +151,8 @@ _constant()
     int ptr()
         %code%{ RETVAL = (int)(intptr_t)THIS; %};
 };
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 
@@ -198,8 +209,11 @@ _constant()
         %code%{ RETVAL = THIS->regions().size(); %};
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     bool invalidate_step(PrintStep step);
     bool invalidate_all_steps();
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
     bool step_done(PrintStep step)
@@ -207,6 +221,7 @@ _constant()
     bool object_step_done(PrintObjectStep step)
         %code%{ RETVAL = THIS->is_step_done(step); %};
     
+<<<<<<< HEAD
 <<<<<<< HEAD
     std::vector<int> object_extruders()
         %code%{
@@ -244,6 +259,8 @@ _constant()
         %};
 =======
 >>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
     SV* filament_stats()
         %code%{
             HV* hv = newHV();
@@ -260,6 +277,7 @@ _constant()
     double max_allowed_layer_height() const;
     bool has_support_material() const;
     void auto_assign_extruders(ModelObject* model_object);
+<<<<<<< HEAD
 <<<<<<< HEAD
     std::string output_filename();
     std::string output_filepath(std::string path = "");
@@ -300,6 +318,16 @@ _constant()
                 croak("%s\n", e.what());
             }
         %};
+=======
+    std::string output_filepath(std::string path = "")
+        %code%{
+            try {
+                RETVAL = THIS->output_filepath(path);
+            } catch (std::exception& e) {
+                croak("%s\n", e.what());
+            }
+        %};
+>>>>>>> origin/merill-merge
         
     bool apply(Model *model, DynamicPrintConfig* config)
         %code%{ 
@@ -322,6 +350,7 @@ _constant()
                 croak("Configuration is not valid: %s\n", err.c_str()); 
             RETVAL = 1;
         %};
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge
 
     void set_callback_event(int evt) %code%{
@@ -369,5 +398,29 @@ Print::total_cost(...)
 
 %}
 =======
+>>>>>>> origin/merill-merge
+=======
+
+    void set_callback_event(int evt) %code%{
+        %};
+    void set_status_silent();
+    void set_status(int percent, const char *message);
+
+    void process() %code%{
+            try {
+                THIS->process();
+            } catch (std::exception& e) {
+                croak("%s\n", e.what());
+            }
+        %};
+
+    void export_gcode(char *path_template) %code%{
+            try {
+                THIS->export_gcode(path_template, nullptr);
+            } catch (std::exception& e) {
+                croak("%s\n", e.what());
+            }
+        %};
+
 >>>>>>> origin/merill-merge
 };

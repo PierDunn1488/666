@@ -12,6 +12,11 @@ Slic3r is mainly a **toolpath generator** for 3D printers: it reads 3D models (S
 Slic3r was born in **2011** within the RepRap community and thanks to its high configurability became the swiss-army knife for 3D printing. It served as a platform for implementing several **new (experimental) ideas that later became technology standards**, such as multiple extruders, brim, variable-height layers, per-object settings, modifiers, post-processing scripts, G-code macros and more. Despite being based on volunteer efforts, Slic3r is still pushing the boundaries of 3D printing.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+Slic3r has been rebased from the active PrusaSlicer and SuperSlicer forks with an eye towards continuing pushing the boundaries of 3D printing and being an slicer for all printers.
+
+>>>>>>> origin/merill-merge
 =======
 Slic3r has been rebased from the active PrusaSlicer and SuperSlicer forks with an eye towards continuing pushing the boundaries of 3D printing and being an slicer for all printers.
 
@@ -28,7 +33,11 @@ Slic3r is:
 * **Powerful:** see the list below!
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 See the [project homepage](https://slic3r.org/) at slic3r.org for more information.
+=======
+See the [project homepage](http://slic3r.org/) at slic3r.org for more information.
+>>>>>>> origin/merill-merge
 =======
 See the [project homepage](http://slic3r.org/) at slic3r.org for more information.
 >>>>>>> origin/merill-merge
@@ -54,7 +63,11 @@ The core parts of Slic3r are written in C++11, with multithreading. The graphica
 ### How to install?
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 You can download a precompiled package from [slic3r.org](https://slic3r.org/) (releases) or from [dl.slicr3r.org](https://dl.slic3r.org/dev/) (automated builds).
+=======
+You can download a precompiled package from [slic3r.org](http://slic3r.org/) (releases) or from [dl.slicr3r.org](http://dl.slic3r.org/dev/) (automated builds).
+>>>>>>> origin/merill-merge
 =======
 You can download a precompiled package from [slic3r.org](http://slic3r.org/) (releases) or from [dl.slicr3r.org](http://dl.slic3r.org/dev/) (automated builds).
 >>>>>>> origin/merill-merge
@@ -71,6 +84,7 @@ Sure, but please read the
 document first!
 
 ### Directory structure
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 * `package/`: the scripts used for packaging the executables
@@ -94,6 +108,8 @@ Contributions by Henrik Brix Andersen, Vojtech Bubnik, Nicolas Dandrimont, Mark 
 ### How can I invoke Slic3r using the command line?
 
 =======
+=======
+>>>>>>> origin/merill-merge
 
 * `package/`: the scripts used for packaging the executables
 * `src/`: the C++ source of the `slic3r` executable and the CMake definition file for compiling it
@@ -124,5 +140,8 @@ Contributions by Henrik Brix Andersen, Vojtech Bubnik, Nicolas Dandrimont, Mark 
 
 ### How can I invoke Slic3r using the command line?
 
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 The command line is documented in the relevant [manual page](https://manual.slic3r.org/advanced/command-line).

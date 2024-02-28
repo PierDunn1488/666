@@ -50,7 +50,10 @@
     int facets_count();
     void reset_repair_stats();
 <<<<<<< HEAD
+<<<<<<< HEAD
     void reverse_normals();
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 
@@ -198,8 +201,13 @@ TriangleMesh::slice(z)
         
         std::vector<ExPolygons> layers;
 <<<<<<< HEAD
+<<<<<<< HEAD
         TriangleMeshSlicer<Z> mslicer(THIS);
         mslicer.slice(z_f, &layers);
+=======
+        TriangleMeshSlicer mslicer(THIS);
+        mslicer.slice(z_f, SlicingMode::Regular, 0.049f, &layers, [](){});
+>>>>>>> origin/merill-merge
 =======
         TriangleMeshSlicer mslicer(THIS);
         mslicer.slice(z_f, SlicingMode::Regular, 0.049f, &layers, [](){});
@@ -245,6 +253,7 @@ TriangleMesh::cut(axis, z, upper, lower)
     TriangleMesh*   lower;
     CODE:
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (axis == X) {
             TriangleMeshSlicer<X>(THIS).cut(z, upper, lower);
         } else if (axis == Y) {
@@ -253,6 +262,8 @@ TriangleMesh::cut(axis, z, upper, lower)
             TriangleMeshSlicer<Z>(THIS).cut(z, upper, lower);
         }
 =======
+=======
+>>>>>>> origin/merill-merge
         THIS->require_shared_vertices(); // TriangleMeshSlicer needs this
         TriangleMeshSlicer mslicer(THIS);
         mslicer.cut(z, upper, lower);

@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Test::More tests => 27;
+=======
+use Test::More tests => 26;
+>>>>>>> origin/merill-merge
 =======
 use Test::More tests => 26;
 >>>>>>> origin/merill-merge
@@ -217,7 +221,10 @@ use Slic3r::Test qw(_eq);
     $config->set('start_gcode', '');
     $config->set('retract_lift', [3, 4]);
 <<<<<<< HEAD
+<<<<<<< HEAD
     $config->set('only_retract_when_crossing_perimeters', 0);
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
     
@@ -265,10 +272,13 @@ use Slic3r::Test qw(_eq);
     };
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     $config->set('retract_layer_change', [1,1]);
     $test->();
     ok !!@lifted_at, 'lift is compatible with retract_layer_change';
     
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
     $config->set('retract_lift_above', [0, 0]);
@@ -294,6 +304,9 @@ use Slic3r::Test qw(_eq);
     ok !(any { $_ > $config->get_at('retract_lift_below', 0) } @lifted_at),
         'Z is not lifted above the configured value';
         
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     # check lifting with different values for 2. extruder
     $config->set('perimeter_extruder', 2);
@@ -310,6 +323,7 @@ use Slic3r::Test qw(_eq);
     ok !(any { $_ < $config->get_at('retract_lift_above', 1) } @lifted_at),
         'Z is not lifted below the configured value for 2. extruder';
 <<<<<<< HEAD
+<<<<<<< HEAD
     {
         my $below = $config->get_at('retract_lift_below', 1);
         $below += $config->layer_height if $config->get_at('retract_layer_change', 1);
@@ -324,6 +338,10 @@ use Slic3r::Test qw(_eq);
     $config->set('retract_lift_below', [0, 0]);
     $test->();
     
+=======
+    ok !(any { $_ > $config->get_at('retract_lift_below', 1) } @lifted_at),
+        'Z is not lifted above the configured value for 2. extruder';
+>>>>>>> origin/merill-merge
 =======
     ok !(any { $_ > $config->get_at('retract_lift_below', 1) } @lifted_at),
         'Z is not lifted above the configured value for 2. extruder';

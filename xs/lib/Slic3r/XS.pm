@@ -134,7 +134,10 @@ sub clone {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/merill-merge
 package Slic3r::ExtrusionSimulator;
 
 sub new {
@@ -142,6 +145,9 @@ sub new {
     return $class->_new();
 }
 
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 package Slic3r::Filler;
 
@@ -149,7 +155,10 @@ sub fill_surface {
     my ($self, $surface, %args) = @_;
     $self->set_density($args{density}) if defined($args{density});
 <<<<<<< HEAD
+<<<<<<< HEAD
     $self->set_dont_connect($args{dont_connect}) if defined($args{dont_connect});
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
     $self->set_dont_adjust($args{dont_adjust}) if defined($args{dont_adjust});
@@ -264,6 +273,10 @@ for my $class (qw(
         Slic3r::ExtrusionPath
         Slic3r::ExtrusionPath::Collection
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        Slic3r::ExtrusionSimulator
+>>>>>>> origin/merill-merge
 =======
         Slic3r::ExtrusionSimulator
 >>>>>>> origin/merill-merge

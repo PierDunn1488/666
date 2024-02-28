@@ -3,7 +3,10 @@ package Slic3r::Model;
 
 use List::Util qw(first max any);
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Slic3r::Geometry qw(X Y Z move_points);
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 
@@ -146,5 +149,8 @@ sub mesh_stats {
     return $self->volumes->[0]->mesh->stats;
 }
 
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 1;

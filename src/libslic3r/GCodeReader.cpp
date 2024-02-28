@@ -1,6 +1,7 @@
 #include "GCodeReader.hpp"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeReader.cpp
 #include <fstream>
 #include <iostream>
@@ -111,6 +112,8 @@ GCodeReader::GCodeLine::set(char arg, std::string value)
     }
     this->args[arg] = value;
 =======
+=======
+>>>>>>> origin/merill-merge
 #include <boost/nowide/fstream.hpp>
 #include <fstream>
 #include <iostream>
@@ -311,7 +314,10 @@ void GCodeReader::GCodeLine::set(const GCodeReader &reader, const Axis axis, con
     }
     m_axis[axis] = new_value;
     m_mask |= 1 << int(axis);
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeReader.cpp
+=======
+>>>>>>> origin/merill-merge
 }
 
 }

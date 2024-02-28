@@ -1,8 +1,13 @@
 #include "SpiralVase.hpp"
+<<<<<<< HEAD
+=======
+#include "GCode.hpp"
+>>>>>>> origin/merill-merge
 #include <sstream>
 
 namespace Slic3r {
 
+<<<<<<< HEAD
 std::string
 _format_z(float z)
 {
@@ -14,6 +19,9 @@ _format_z(float z)
 
 std::string
 SpiralVase::process_layer(const std::string &gcode)
+=======
+std::string SpiralVase::process_layer(const std::string &gcode)
+>>>>>>> origin/merill-merge
 {
     /*  This post-processor relies on several assumptions:
         - all layers are processed through it, including those that are not supposed
@@ -25,14 +33,20 @@ SpiralVase::process_layer(const std::string &gcode)
     
     // If we're not going to modify G-code, just feed it to the reader
     // in order to update positions.
+<<<<<<< HEAD
     if (!this->enable) {
         this->_reader.parse(gcode, {});
+=======
+    if (! m_enabled) {
+        m_reader.parse_buffer(gcode);
+>>>>>>> origin/merill-merge
         return gcode;
     }
     
     // Get total XY length for this layer by summing all extrusion moves.
     float total_layer_length = 0;
     float layer_height = 0;
+<<<<<<< HEAD
     float z;
     bool set_z = false;
     
@@ -47,6 +61,23 @@ SpiralVase::process_layer(const std::string &gcode)
                     layer_height += line.dist_Z();
                     if (!set_z) {
                         z = line.new_Z();
+=======
+    float z = 0.f;
+    
+    {
+        //FIXME Performance warning: This copies the GCodeConfig of the reader.
+        GCodeReader r = m_reader;  // clone
+        bool set_z = false;
+        r.parse_buffer(gcode, [&total_layer_length, &layer_height, &z, &set_z]
+            (GCodeReader &reader, const GCodeReader::GCodeLine &line) {
+            if (line.cmd_is("G1")) {
+                if (line.extruding(reader)) {
+                    total_layer_length += line.dist_XY(reader);
+                } else if (line.has(Z)) {
+                    layer_height += line.dist_Z(reader);
+                    if (!set_z) {
+                        z = line.new_Z(reader);
+>>>>>>> origin/merill-merge
                         set_z = true;
                     }
                 }
@@ -58,6 +89,7 @@ SpiralVase::process_layer(const std::string &gcode)
     z -= layer_height;
     
     std::string new_gcode;
+<<<<<<< HEAD
     this->_reader.parse(gcode, [&new_gcode, &z, &layer_height, &total_layer_length]
         (GCodeReader &, GCodeReader::GCodeLine line) {
         if (line.cmd == "G1") {
@@ -75,6 +107,42 @@ SpiralVase::process_layer(const std::string &gcode)
                         z += dist_XY * layer_height / total_layer_length;
                         line.set('Z', _format_z(z));
                         new_gcode += line.raw + '\n';
+=======
+    //FIXME Tapering of the transition layer only works reliably with relative extruder distances.
+    // For absolute extruder distances it will be switched off.
+    // Tapering the absolute extruder distances requires to process every extrusion value after the first transition
+    // layer.
+    bool  transition = m_transition_layer && m_config->use_relative_e_distances.value;
+    if (transition)
+        new_gcode += "; Began spiral\n";
+    bool  keep_first_travel = m_transition_layer;
+    float layer_height_factor = layer_height / total_layer_length;
+    float len = 0.f;
+    m_reader.parse_buffer(gcode, [&keep_first_travel , &new_gcode, &z, total_layer_length, layer_height_factor, transition, &len]
+        (GCodeReader &reader, GCodeReader::GCodeLine line) {
+        if (line.cmd_is("G1")) {
+            if (line.has_z()) {
+                // If this is the initial Z move of the layer, replace it with a
+                // (redundant) move to the last Z of previous layer.
+                line.set(reader, Z, z);
+                new_gcode += line.raw() + '\n';
+                return;
+            } else {
+                float dist_XY = line.dist_XY(reader);
+                if (dist_XY > 0) {
+                    // horizontal move
+                    if (line.extruding(reader)) {
+                        keep_first_travel = false;
+                        len += dist_XY;
+                        line.set(reader, Z, z + len * layer_height_factor);
+                        if (transition && line.has(E))
+                            // Transition layer, modulate the amount of extrusion from zero to the final value.
+                            line.set(reader, E, line.value(E) * len / total_layer_length);
+                        new_gcode += line.raw() + '\n';
+                    } else if (keep_first_travel) {
+                        //we can travel until the first spiral extrusion
+                        new_gcode += line.raw() + '\n';
+>>>>>>> origin/merill-merge
                     }
                     return;
                 
@@ -86,7 +154,11 @@ SpiralVase::process_layer(const std::string &gcode)
                 }
             }
         }
+<<<<<<< HEAD
         new_gcode += line.raw + '\n';
+=======
+        new_gcode += line.raw() + '\n';
+>>>>>>> origin/merill-merge
     });
     
     return new_gcode;

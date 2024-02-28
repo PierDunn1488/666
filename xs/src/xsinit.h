@@ -38,7 +38,11 @@
 #include <iostream>
 #include <sstream>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <libslic3r.h>
+=======
+// #include <libslic3r.h>
+>>>>>>> origin/merill-merge
 =======
 // #include <libslic3r.h>
 >>>>>>> origin/merill-merge
@@ -54,6 +58,7 @@
 #undef bind
 #undef seed
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef _MSC_VER
     // Undef some of the macros set by Perl <xsinit.h>, which cause compilation errors on Win32
     #undef send
@@ -61,6 +66,8 @@
 #endif /* _MSC_VER */
 }
 =======
+=======
+>>>>>>> origin/merill-merge
 #undef push
 #undef pop
 #ifdef _MSC_VER
@@ -102,6 +109,9 @@
 #undef Packet
 #undef _
 // }
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 #endif
 
@@ -222,6 +232,7 @@ SV* to_SV_pureperl(const Point* THIS);
 void from_SV(SV* point_sv, Point* point);
 void from_SV_check(SV* point_sv, Point* point);
 <<<<<<< HEAD
+<<<<<<< HEAD
 SV* to_SV_pureperl(const Pointf* point);
 bool from_SV(SV* point_sv, Pointf* point);
 bool from_SV_check(SV* point_sv, Pointf* point);
@@ -247,6 +258,13 @@ class Filler
     };
     Fill* fill;
 };
+=======
+SV* to_SV_pureperl(const Vec2d* point);
+bool from_SV(SV* point_sv, Vec2d* point);
+bool from_SV_check(SV* point_sv, Vec2d* point);
+void from_SV_check(SV* surface_sv, Surface* THIS);
+SV* to_SV(TriangleMesh* THIS);
+>>>>>>> origin/merill-merge
 
 }
 

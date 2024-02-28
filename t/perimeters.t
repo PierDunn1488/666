@@ -317,6 +317,7 @@ use Slic3r::Test;
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
     $config->set('skirts', 0);
     $config->set('perimeters', 3);
@@ -366,6 +367,9 @@ use Slic3r::Test;
 
 {
     my $config = Slic3r::Config->new_from_defaults;
+=======
+    my $config = Slic3r::Config::new_from_defaults;
+>>>>>>> origin/merill-merge
 =======
     my $config = Slic3r::Config::new_from_defaults;
 >>>>>>> origin/merill-merge

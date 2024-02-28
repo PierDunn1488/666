@@ -11,7 +11,11 @@
 
 %name{Slic3r::Point} class Point {
 <<<<<<< HEAD
+<<<<<<< HEAD
     Point(coord_t _x = 0, coord_t _y = 0);
+=======
+    Point(int _x = 0, int _y = 0);
+>>>>>>> origin/merill-merge
 =======
     Point(int _x = 0, int _y = 0);
 >>>>>>> origin/merill-merge

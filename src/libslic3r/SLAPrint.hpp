@@ -1,6 +1,7 @@
 #ifndef slic3r_SLAPrint_hpp_
 #define slic3r_SLAPrint_hpp_
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SLAPrint.hpp
 #include "libslic3r.h"
 #include "ExPolygon.hpp"
@@ -57,6 +58,8 @@ class SLAPrint
 
 #endif
 =======
+=======
+>>>>>>> origin/merill-merge
 #include <cstdint>
 #include <mutex>
 #include "PrintBase.hpp"
@@ -620,4 +623,7 @@ bool validate_pad(const TriangleMesh &pad, const sla::PadConfig &pcfg);
 } // namespace Slic3r
 
 #endif /* slic3r_SLAPrint_hpp_ */
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SLAPrint.hpp
+=======
+>>>>>>> origin/merill-merge

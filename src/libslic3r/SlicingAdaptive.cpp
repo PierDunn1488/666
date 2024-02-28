@@ -1,4 +1,5 @@
 #include "libslic3r.h"
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SlicingAdaptive.cpp
 #include <limits>
 #include "TriangleMesh.hpp"
@@ -20,6 +21,8 @@
  */
 #define SURFACE_CONST 0.18403
 =======
+=======
+>>>>>>> origin/merill-merge
 #include "Model.hpp"
 #include "TriangleMesh.hpp"
 #include "SlicingAdaptive.hpp"
@@ -51,11 +54,15 @@ legend("tan(a) as cura - topographic lines distance limit", "sqrt(tan(a)) as "+S
 #ifndef NDEBUG
 	#define ADAPTIVE_LAYER_HEIGHT_DEBUG
 #endif /* NDEBUG */
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SlicingAdaptive.cpp
+=======
+>>>>>>> origin/merill-merge
 
 namespace Slic3r
 {
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SlicingAdaptive.cpp
 void SlicingAdaptive::clear()
 {
@@ -186,6 +193,8 @@ float SlicingAdaptive::next_layer_height(coordf_t z, coordf_t quality_factor, co
 #endif
     return height;
 =======
+=======
+>>>>>>> origin/merill-merge
 static inline std::pair<float, float> face_z_span(const stl_facet &f)
 {
 	return std::pair<float, float>(
@@ -345,11 +354,15 @@ float SlicingAdaptive::next_layer_height(const float print_z, float quality_fact
     BOOST_LOG_TRIVIAL(trace) << "adaptive layer computation, layer-bottom at z:" << print_z << ", quality_factor:" << quality_factor << ", resulting layer height:" << height;
 #endif  /* ADAPTIVE_LAYER_HEIGHT_DEBUG */
 	return height; 
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SlicingAdaptive.cpp
+=======
+>>>>>>> origin/merill-merge
 }
 
 // Returns the distance to the next horizontal facet in Z-dir 
 // to consider horizontal object features in slice thickness
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SlicingAdaptive.cpp
 float SlicingAdaptive::horizontal_facet_distance(coordf_t z, coordf_t max_layer_height)
 {
@@ -376,6 +389,8 @@ float SlicingAdaptive::_layer_height_from_facet(int ordered_id, float scaled_qua
     float height = scaled_quality_factor/(SURFACE_CONST + normal_z/2);
     return height;
 =======
+=======
+>>>>>>> origin/merill-merge
 float SlicingAdaptive::horizontal_facet_distance(float z)
 {
 	for (size_t i = 0; i < m_faces.size(); ++ i) {
@@ -391,7 +406,10 @@ float SlicingAdaptive::horizontal_facet_distance(float z)
 	// objects maximum?
 	return (z + (float)m_slicing_params.max_layer_height > (float)m_slicing_params.object_print_z_height()) ? 
 		std::max((float)m_slicing_params.object_print_z_height() - z, 0.f) : (float)m_slicing_params.max_layer_height;
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SlicingAdaptive.cpp
+=======
+>>>>>>> origin/merill-merge
 }
 
 }; // namespace Slic3r

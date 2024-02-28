@@ -19,10 +19,13 @@ VERSION()
 
 SV*
 <<<<<<< HEAD
+<<<<<<< HEAD
 GITVERSION()
     CODE:
         RETVAL = newSVpv(SLIC3R_GIT, 0);
 =======
+=======
+>>>>>>> origin/merill-merge
 BUILD()
     CODE:
         RETVAL = newSVpv(SLIC3R_BUILD_ID, 0);
@@ -161,6 +164,9 @@ path_to_parent_path(src)
     const char *src;
     CODE:
         RETVAL = Slic3r::PerlUtils::path_to_parent_path(src);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     OUTPUT: RETVAL
 
@@ -173,7 +179,11 @@ xspp_test_croak_hangs_on_strawberry()
     		croak("xspp_test_croak_hangs_on_strawberry: exception catched\n");
     	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 %}
+=======
+%}
+>>>>>>> origin/merill-merge
 =======
 %}
 >>>>>>> origin/merill-merge

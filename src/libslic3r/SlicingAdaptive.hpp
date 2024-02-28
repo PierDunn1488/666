@@ -1,29 +1,40 @@
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SlicingAdaptive.hpp
 #ifndef slic3r_SlicingAdaptive_hpp_
 #define slic3r_SlicingAdaptive_hpp_
 
 =======
+=======
+>>>>>>> origin/merill-merge
 // Based on implementation by @platsch
 
 #ifndef slic3r_SlicingAdaptive_hpp_
 #define slic3r_SlicingAdaptive_hpp_
 
 #include "Slicing.hpp"
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SlicingAdaptive.hpp
+=======
+>>>>>>> origin/merill-merge
 #include "admesh/stl.h"
 
 namespace Slic3r
 {
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SlicingAdaptive.hpp
 class TriangleMesh;
 =======
 class ModelVolume;
 >>>>>>> origin/merill-merge:src/libslic3r/SlicingAdaptive.hpp
+=======
+class ModelVolume;
+>>>>>>> origin/merill-merge
 
 class SlicingAdaptive
 {
 public:
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/SlicingAdaptive.hpp
     SlicingAdaptive() {};
     ~SlicingAdaptive() {};
@@ -46,6 +57,8 @@ protected:
     // Z component of face normals, normalized.
     std::vector<float>					m_face_normal_z;
 =======
+=======
+>>>>>>> origin/merill-merge
     void  clear();
     void  set_slicing_parameters(SlicingParameters params) { m_slicing_params = params; }
     void  prepare(const ModelObject &object);
@@ -67,7 +80,10 @@ protected:
 	SlicingParameters 		m_slicing_params;
 
 	std::vector<FaceZ>		m_faces;
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/SlicingAdaptive.hpp
+=======
+>>>>>>> origin/merill-merge
 };
 
 }; // namespace Slic3r

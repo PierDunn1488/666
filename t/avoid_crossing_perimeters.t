@@ -6,7 +6,11 @@ BEGIN {
     use FindBin;
     use lib "$FindBin::Bin/../lib";
 <<<<<<< HEAD
+<<<<<<< HEAD
     use local::lib "$FindBin::Bin/../local-lib";
+=======
+    use local::lib "$FindBin::Bin/../local-lib";    
+>>>>>>> origin/merill-merge
 =======
     use local::lib "$FindBin::Bin/../local-lib";    
 >>>>>>> origin/merill-merge

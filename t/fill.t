@@ -3,7 +3,13 @@ use strict;
 use warnings;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 plan tests => 95;
+=======
+#plan tests => 43;
+# Test of a 100% coverage is off.
+plan tests => 19;
+>>>>>>> origin/merill-merge
 =======
 #plan tests => 43;
 # Test of a 100% coverage is off.
@@ -26,6 +32,7 @@ use Slic3r::Test;
 sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
 
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     my $print = Slic3r::Print->new;
     my $surface_width = 250;
@@ -115,6 +122,8 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
 {
 =======
 >>>>>>> origin/merill-merge
+=======
+>>>>>>> origin/merill-merge
     my $expolygon = Slic3r::ExPolygon->new([ scale_points [0,0], [50,0], [50,50], [0,50] ]);
     my $filler = Slic3r::Filler->new_from_type('rectilinear');
     $filler->set_bounding_box($expolygon->bounding_box);
@@ -129,8 +138,12 @@ sub scale_points (@) { map [scale $_->[X], scale $_->[Y]], @_ }
         nozzle_diameter => 0.50,
     );
 <<<<<<< HEAD
+<<<<<<< HEAD
     $filler->set_min_spacing($flow->spacing);
     $filler->set_density(1);
+=======
+    $filler->set_spacing($flow->spacing);
+>>>>>>> origin/merill-merge
 =======
     $filler->set_spacing($flow->spacing);
 >>>>>>> origin/merill-merge
@@ -152,7 +165,13 @@ SKIP:
         $filler->set_bounding_box($expolygon->bounding_box);
         $filler->set_angle($angle // 0);
 <<<<<<< HEAD
+<<<<<<< HEAD
         $filler->set_dont_adjust(0);
+=======
+        # Adjust line spacing to fill the region.
+        $filler->set_dont_adjust(0);
+        $filler->set_link_max_length(scale(1.2*$flow_spacing));
+>>>>>>> origin/merill-merge
 =======
         # Adjust line spacing to fill the region.
         $filler->set_dont_adjust(0);
@@ -168,7 +187,11 @@ SKIP:
             nozzle_diameter => $flow_spacing,
         );
 <<<<<<< HEAD
+<<<<<<< HEAD
         $filler->set_min_spacing($flow->spacing);
+=======
+        $filler->set_spacing($flow->spacing);
+>>>>>>> origin/merill-merge
 =======
         $filler->set_spacing($flow->spacing);
 >>>>>>> origin/merill-merge
@@ -190,18 +213,24 @@ SKIP:
         if (0 && @$uncovered_filtered) {
             require "Slic3r/SVG.pm";
 <<<<<<< HEAD
+<<<<<<< HEAD
             Slic3r::SVG::output(
                 "uncovered.svg",
                 expolygons      => [$expolygon],
                 red_expolygons  => $uncovered,
                 polylines       => $paths,
 =======
+=======
+>>>>>>> origin/merill-merge
             Slic3r::SVG::output("uncovered.svg", 
                 no_arrows       => 1,
                 expolygons      => [ $expolygon ],
                 blue_expolygons => [ @$uncovered ],
                 red_expolygons  => [ @$uncovered_filtered ],
                 polylines       => [ @$paths ],
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
             );
             exit;

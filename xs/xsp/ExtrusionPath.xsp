@@ -23,6 +23,7 @@
     void simplify(double tolerance);
     double length();
 <<<<<<< HEAD
+<<<<<<< HEAD
     bool is_perimeter();
     bool is_infill();
     bool is_solid_infill();
@@ -30,11 +31,16 @@
     Polygons grow();
     Clone<Polyline> as_polyline();
 =======
+=======
+>>>>>>> origin/merill-merge
     ExtrusionRole role() const;
     bool is_bridge()
         %code{% RETVAL = is_bridge(THIS->role()); %};
     Polygons polygons_covered_by_width();
     Polygons polygons_covered_by_spacing();
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 %{
 

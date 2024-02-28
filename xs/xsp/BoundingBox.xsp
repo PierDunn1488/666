@@ -18,6 +18,10 @@
     void offset(double delta);
     bool contains_point(Point* point) %code{% RETVAL = THIS->contains(*point); %};
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    bool overlap(BoundingBox* bbox) %code{% RETVAL = THIS->overlap(*bbox); %};
+>>>>>>> origin/merill-merge
 =======
     bool overlap(BoundingBox* bbox) %code{% RETVAL = THIS->overlap(*bbox); %};
 >>>>>>> origin/merill-merge
@@ -29,11 +33,14 @@
     Clone<Point> min_point() %code{% RETVAL = THIS->min; %};
     Clone<Point> max_point() %code{% RETVAL = THIS->max; %};
 <<<<<<< HEAD
+<<<<<<< HEAD
     long x_min() %code{% RETVAL = THIS->min.x; %};
     long x_max() %code{% RETVAL = THIS->max.x; %};
     long y_min() %code{% RETVAL = THIS->min.y; %};
     long y_max() %code{% RETVAL = THIS->max.y; %};
 =======
+=======
+>>>>>>> origin/merill-merge
     int x_min() %code{% RETVAL = THIS->min(0); %};
     int x_max() %code{% RETVAL = THIS->max(0); %};
     int y_min() %code{% RETVAL = THIS->min(1); %};
@@ -43,6 +50,9 @@
     void set_y_min(double val) %code{% THIS->min(1) = val; %};
     void set_y_max(double val) %code{% THIS->max(1) = val; %};
     std::string serialize() %code{% char buf[2048]; sprintf(buf, "%ld,%ld;%ld,%ld", THIS->min(0), THIS->min(1), THIS->max(0), THIS->max(1)); RETVAL = buf; %};
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     bool defined() %code{% RETVAL = THIS->defined; %};
 
@@ -70,6 +80,7 @@ new_from_points(CLASS, points)
     void scale(double factor);
     void translate(double x, double y);
 <<<<<<< HEAD
+<<<<<<< HEAD
     bool contains_point(Pointf* point) %code{% RETVAL = THIS->contains(*point); %};
     Clone<Pointf> size();
     Clone<Pointf> center();
@@ -84,6 +95,8 @@ new_from_points(CLASS, points)
     void set_y_min(double val) %code{% THIS->min.y = val; %};
     void set_y_max(double val) %code{% THIS->max.y = val; %};
 =======
+=======
+>>>>>>> origin/merill-merge
     Clone<Vec2d> size();
     Clone<Vec2d> center();
     double radius();
@@ -99,6 +112,9 @@ new_from_points(CLASS, points)
     void set_y_min(double val) %code{% THIS->min(1) = val; %};
     void set_y_max(double val) %code{% THIS->max(1) = val; %};
     std::string serialize() %code{% char buf[2048]; sprintf(buf, "%lf,%lf;%lf,%lf", THIS->min(0), THIS->min(1), THIS->max(0), THIS->max(1)); RETVAL = buf; %};
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     bool defined() %code{% RETVAL = THIS->defined; %};
     
@@ -126,6 +142,7 @@ new_from_points(CLASS, points)
     void scale(double factor);
     void translate(double x, double y, double z);
 <<<<<<< HEAD
+<<<<<<< HEAD
     Clone<Pointf3> size();
     Clone<Pointf3> center();
     Clone<Pointf3> min_point() %code{% RETVAL = THIS->min; %};
@@ -137,6 +154,8 @@ new_from_points(CLASS, points)
     double z_min() %code{% RETVAL = THIS->min.z; %};
     double z_max() %code{% RETVAL = THIS->max.z; %};
 =======
+=======
+>>>>>>> origin/merill-merge
     void offset(double delta);
     bool contains_point(Vec3d* point) %code{% RETVAL = THIS->contains(*point); %};
     Clone<Vec3d> size();
@@ -152,6 +171,9 @@ new_from_points(CLASS, points)
     double z_min() %code{% RETVAL = THIS->min(2); %};
     double z_max() %code{% RETVAL = THIS->max(2); %};
     std::string serialize() %code{% char buf[2048]; sprintf(buf, "%lf,%lf,%lf;%lf,%lf,%lf", THIS->min(0), THIS->min(1), THIS->min(2), THIS->max(0), THIS->max(1), THIS->max(2)); RETVAL = buf; %};
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     bool defined() %code{% RETVAL = THIS->defined; %};
 };

@@ -3,7 +3,11 @@ use strict;
 use warnings;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 plan tests => 13;
+=======
+plan tests => 14;
+>>>>>>> origin/merill-merge
 =======
 plan tests => 14;
 >>>>>>> origin/merill-merge
@@ -38,6 +42,10 @@ sub buffer {
     $gcodegen->apply_print_config($print_config);
     $gcodegen->set_layer_count(10);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    $gcodegen->set_extruders([ 0 ]);
+>>>>>>> origin/merill-merge
 =======
     $gcodegen->set_extruders([ 0 ]);
 >>>>>>> origin/merill-merge
@@ -74,24 +82,34 @@ $config->set('disable_fan_first_layers',    [ 0 ]);
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $buffer = buffer($config);
     $buffer->gcodegen->set_elapsed_time($buffer->gcodegen->config->slowdown_below_layer_time + 1);
     my $gcode = $buffer->append('G1 F3000;_EXTRUDE_SET_SPEED\nG1 X100 E1', 0, 0, 0.4) . $buffer->flush;
 =======
+=======
+>>>>>>> origin/merill-merge
     my $gcode_src  = "G1 F3000;_EXTRUDE_SET_SPEED\nG1 X100 E1";
     # Print time of $gcode.
     my $print_time = 100 / (3000 / 60);
     my $buffer = buffer($config, { 'slowdown_below_layer_time' => [ $print_time * 0.999 ] });
     my $gcode = $buffer->process_layer($gcode_src, 0);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     like $gcode, qr/F3000/, 'speed is not altered when elapsed time is greater than slowdown threshold';
 }
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $buffer = buffer($config);
     $buffer->gcodegen->set_elapsed_time($buffer->gcodegen->config->slowdown_below_layer_time - 1);
     my $gcode = $buffer->append(
+=======
+    my $gcode_src  = 
+>>>>>>> origin/merill-merge
 =======
     my $gcode_src  = 
 >>>>>>> origin/merill-merge
@@ -111,20 +129,27 @@ $config->set('disable_fan_first_layers',    [ 0 ]);
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $buffer = buffer($config);
     $buffer->gcodegen->set_elapsed_time($buffer->gcodegen->config->fan_below_layer_time + 1);
     my $gcode = $buffer->append('G1 X100 E1 F3000', 0, 0, 0.4) . $buffer->flush;
 =======
+=======
+>>>>>>> origin/merill-merge
     my $buffer = buffer($config, {
             'fan_below_layer_time'      => [ $print_time1 * 0.88 ],
             'slowdown_below_layer_time' => [ $print_time1 * 0.99 ]
         });
     my $gcode = $buffer->process_layer($gcode1, 0);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     unlike $gcode, qr/M106/, 'fan is not activated when elapsed time is greater than fan threshold';
 }
 
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     my $buffer = buffer($config);
     my $gcode = "";
@@ -192,6 +217,35 @@ $config->set('disable_fan_first_layers',    [ 0 ]);
 }
 
 {
+=======
+    my $gcode .= buffer($config, { 'slowdown_below_layer_time', [ $print_time2 * 0.99 ] })->process_layer($gcode2, 0);
+    like $gcode, qr/F3000/, 'slowdown is computed on all objects printing at the same Z';
+}
+
+{
+    # use an elapsed time which is < the threshold but greater than it when summed twice
+    my $buffer = buffer($config, {
+            'fan_below_layer_time'      => [ $print_time2 * 0.65], 
+            'slowdown_below_layer_time' => [ $print_time2 * 0.7 ] 
+        });
+    my $gcode = $buffer->process_layer($gcode2, 0) .
+                $buffer->process_layer($gcode2, 1);
+    unlike $gcode, qr/M106/, 'fan is not activated on all objects printing at different Z';
+}
+
+{
+    # use an elapsed time which is < the threshold even when summed twice
+    my $buffer = buffer($config, {
+            'fan_below_layer_time'      => [ $print_time2 + 1 ], 
+            'slowdown_below_layer_time' => [ $print_time2 + 2 ] 
+        });
+    my $gcode = $buffer->process_layer($gcode2, 0) .
+                $buffer->process_layer($gcode2, 1);
+    like $gcode, qr/M106/, 'fan is activated on all objects printing at different Z';
+}
+
+{
+>>>>>>> origin/merill-merge
     my $buffer = buffer($config, {
             'cooling'                   => [ 1               , 0                ],
             'fan_below_layer_time'      => [ $print_time2 + 1, $print_time2 + 1 ], 
@@ -239,17 +293,23 @@ $config->set('disable_fan_first_layers',    [ 0 ]);
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
     $config->set('cooling', 1);
     $config->set('fan_below_layer_time', 0);
     $config->set('slowdown_below_layer_time', 10);
     $config->set('min_print_speed', 0);
 =======
+=======
+>>>>>>> origin/merill-merge
     my $config = Slic3r::Config::new_from_defaults;
     $config->set('cooling', [ 1 ]);
     $config->set('fan_below_layer_time', [ 0 ]);
     $config->set('slowdown_below_layer_time', [ 10 ]);
     $config->set('min_print_speed', [ 0 ]);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     $config->set('start_gcode', '');
     $config->set('first_layer_speed', '100%');
@@ -274,6 +334,7 @@ $config->set('disable_fan_first_layers',    [ 0 ]);
     });
     @layer_times = grep $_, @layer_times;
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $all_below = none { $_ < $config->slowdown_below_layer_time } @layer_times;
     ok $all_below, 'slowdown_below_layer_time is honored';
     
@@ -281,12 +342,17 @@ $config->set('disable_fan_first_layers',    [ 0 ]);
     my $external = all { $_ > 0 } values %layer_external;
     ok $external, 'slowdown_below_layer_time does not alter external perimeters';
 =======
+=======
+>>>>>>> origin/merill-merge
     my $all_below = none { $_ < $config->slowdown_below_layer_time->[0] } @layer_times;
     ok $all_below, 'slowdown_below_layer_time is honored';
     
     # check that all layers have at least one unaltered external perimeter speed
 #    my $external = all { $_ > 0 } values %layer_external;
 #    ok $external, 'slowdown_below_layer_time does not alter external perimeters';
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 }
 

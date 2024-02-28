@@ -34,6 +34,7 @@
 
 // Otherwise #defines like M_PI are undeclared under Visual Studio
 #ifndef _USE_MATH_DEFINES
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/poly2tri/common/utils.h
 #define _USE_MATH_DEFINES
 #endif
@@ -41,6 +42,10 @@
 	#define _USE_MATH_DEFINES
 #endif /* _USE_MATH_DEFINES */
 >>>>>>> origin/merill-merge:src/poly2tri/common/utils.h
+=======
+	#define _USE_MATH_DEFINES
+#endif /* _USE_MATH_DEFINES */
+>>>>>>> origin/merill-merge
 
 #include "shapes.h"
 

@@ -49,11 +49,14 @@ std::fstream fs;
 
 namespace Slic3r {
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
 constexpr auto KEEP_SENT = 20;
 
 namespace asio = boost::asio;
 
+=======
+>>>>>>> origin/merill-merge
 GCodeSender::GCodeSender()
     : io(), serial(io), open(false),
       connected(false), error(false), can_send(false), queue_paused(false), sent(0)
@@ -67,7 +70,10 @@ GCodeSender::GCodeSender()
     std::srand(std::time(nullptr));
 #endif
 }
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+>>>>>>> origin/merill-merge
 
 GCodeSender::~GCodeSender()
 {
@@ -82,36 +88,50 @@ GCodeSender::connect(std::string devname, unsigned int baud_rate)
     try {
         this->serial.open(devname);
         
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
         this->serial.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::odd));
         this->serial.set_option(asio::serial_port_base::character_size(asio::serial_port_base::character_size(8)));
         this->serial.set_option(asio::serial_port_base::flow_control(asio::serial_port_base::flow_control::none));
         this->serial.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::one));
 =======
+=======
+>>>>>>> origin/merill-merge
         this->serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::odd));
         this->serial.set_option(boost::asio::serial_port_base::character_size(boost::asio::serial_port_base::character_size(8)));
         this->serial.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
         this->serial.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+>>>>>>> origin/merill-merge
         this->set_baud_rate(baud_rate);
     
         this->serial.close();
         this->serial.open(devname);
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
         this->serial.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::none));
 =======
         this->serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+        this->serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
+>>>>>>> origin/merill-merge
     
         // set baud rate again because set_option overwrote it
         this->set_baud_rate(baud_rate);
         this->open = true;
         this->reset();
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
     } catch (boost::system::system_error &e) {
 =======
     } catch (boost::system::system_error &) {
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+    } catch (boost::system::system_error &) {
+>>>>>>> origin/merill-merge
         this->set_error_status(true);
         return false;
     }
@@ -119,11 +139,15 @@ GCodeSender::connect(std::string devname, unsigned int baud_rate)
     // a reset firmware expect line numbers to start again from 1
     this->sent = 0;
     this->last_sent.clear();
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
     
 =======
 
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+
+>>>>>>> origin/merill-merge
     /* Initialize debugger */
 #ifdef DEBUG_SERIAL
     fs.open("serial.txt", std::fstream::out | std::fstream::trunc);
@@ -137,17 +161,23 @@ GCodeSender::connect(std::string devname, unsigned int baud_rate)
     boost::thread t(boost::bind(&boost::asio::io_service::run, &this->io));
     this->background_thread.swap(t);
     
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
     // always send a M105 to check for connection because firmware might be silent on connect 
     boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
     this->sent++;
     this->send("M105", true);
 =======
+=======
+>>>>>>> origin/merill-merge
     // always send a M105 to check for connection because firmware might be silent on connect
     //FIXME Vojtech: This is being sent too early, leading to line number synchronization issues,
     // from which the GCodeSender never recovers.
     // this->send("M105", true);
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+>>>>>>> origin/merill-merge
     
     return true;
 }
@@ -168,11 +198,15 @@ GCodeSender::set_baud_rate(unsigned int baud_rate)
         speed_t newSpeed = baud_rate;
         ioctl(handle, IOSSIOSPEED, &newSpeed);
         ::tcsetattr(handle, TCSANOW, &ios);
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
 #elif __linux
 =======
 #elif __linux__
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+#elif __linux__
+>>>>>>> origin/merill-merge
         termios2 ios;
         if (ioctl(handle, TCGETS2, &ios))
             printf("Error in TCGETS2: %s\n", strerror(errno));
@@ -402,17 +436,23 @@ GCodeSender::on_read(const boost::system::error_code& error,
             // extract the first number from line
             boost::algorithm::trim_left_if(line, !boost::algorithm::is_digit());
             size_t toresend = boost::lexical_cast<size_t>(line.substr(0, line.find_first_not_of("0123456789")));
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
             toresend++; // N is 0-based
             if (toresend >= this->sent - this->last_sent.size() && toresend < this->last_sent.size()) {
 =======
+=======
+>>>>>>> origin/merill-merge
             
 #ifdef DEBUG_SERIAL
             fs << "!! line num out of sync: toresend = " << toresend << ", sent = " << sent << ", last_sent.size = " << last_sent.size() << std::endl;
 #endif
 
             if (toresend > this->sent - this->last_sent.size() && toresend <= this->sent) {
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+>>>>>>> origin/merill-merge
                 {
                     boost::lock_guard<boost::mutex> l(this->queue_mutex);
                     
@@ -534,10 +574,13 @@ GCodeSender::do_send()
     if (line.empty()) return;
     
     // compute full line
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
     std::string full_line = "N" + boost::lexical_cast<std::string>(this->sent) + " " + line;
     this->sent++;
 =======
+=======
+>>>>>>> origin/merill-merge
     ++ this->sent;
 #ifndef DEBUG_SERIAL
     const auto line_num = this->sent;
@@ -546,7 +589,10 @@ GCodeSender::do_send()
     const auto line_num = std::rand() < RAND_MAX/4 ? 0 : this->sent;
 #endif
     std::string full_line = "N" + boost::lexical_cast<std::string>(line_num) + " " + line;
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+>>>>>>> origin/merill-merge
     
     // calculate checksum
     int cs = 0;
@@ -625,9 +671,13 @@ GCodeSender::reset()
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.cpp
 }
 
 =======
 } // namespace Slic3r
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.cpp
+=======
+} // namespace Slic3r
+>>>>>>> origin/merill-merge

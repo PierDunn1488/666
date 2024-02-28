@@ -90,7 +90,11 @@ Surface::offset(delta, joinType = ClipperLib::jtMiter, miterLimit = 3)
     double                  miterLimit
     CODE:
 <<<<<<< HEAD
+<<<<<<< HEAD
         RETVAL = offset(*THIS, delta, scale, joinType, miterLimit);
+=======
+        surfaces_append(RETVAL, offset_ex(THIS->expolygon, delta, joinType, miterLimit), *THIS);
+>>>>>>> origin/merill-merge
 =======
         surfaces_append(RETVAL, offset_ex(THIS->expolygon, delta, joinType, miterLimit), *THIS);
 >>>>>>> origin/merill-merge
@@ -118,6 +122,9 @@ _constant()
     S_TYPE_INTERNALBRIDGE   = stInternalBridge
     S_TYPE_INTERNALVOID     = stInternalVoid
     S_TYPW_PERIMETER        = stPerimeter
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
   PROTOTYPE:
   CODE:

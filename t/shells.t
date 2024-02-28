@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Test::More tests => 24;
+=======
+use Test::More tests => 20;
+>>>>>>> origin/merill-merge
 =======
 use Test::More tests => 20;
 >>>>>>> origin/merill-merge
@@ -333,6 +337,7 @@ use Slic3r::Test;
 #    });
 #    is $diagonal_moves, 0, 'no spiral moves on two-island object';
 #}
+<<<<<<< HEAD
 
 {
     # GH: #3732
@@ -352,5 +357,7 @@ use Slic3r::Test;
     is scalar(@{$layerm19->fill_surfaces->filter_by_type(S_TYPE_TOP)}), 0, 'no top fill_surface detected';
     is $layerm19->perimeters->items_count, 3, 'extra perimeter detected';
 }
+=======
+>>>>>>> origin/merill-merge
 
 __END__

@@ -115,6 +115,7 @@ Polygons
 ExPolygonCollection::contours() const
 {
     Polygons contours;
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/ExPolygonCollection.cpp
     for (const ExPolygon &ex : this->expolygons)
         contours.push_back(ex.contour);
@@ -123,6 +124,11 @@ ExPolygonCollection::contours() const
     for (ExPolygons::const_iterator it = this->expolygons.begin(); it != this->expolygons.end(); ++it)
         contours.push_back(it->contour);
 >>>>>>> origin/merill-merge:src/libslic3r/ExPolygonCollection.cpp
+=======
+    contours.reserve(this->expolygons.size());
+    for (ExPolygons::const_iterator it = this->expolygons.begin(); it != this->expolygons.end(); ++it)
+        contours.push_back(it->contour);
+>>>>>>> origin/merill-merge
     return contours;
 }
 
@@ -151,6 +157,11 @@ ExPolygonCollection::contains(const Point &point) const {
         if (poly.contour.contains(point)) return true;
     }
     return false;
+}
+
+BoundingBox get_extents(const ExPolygonCollection &expolygon)
+{
+    return get_extents(expolygon.expolygons);
 }
 
 BoundingBox get_extents(const ExPolygonCollection &expolygon)

@@ -183,6 +183,9 @@ union_ex(subject, safety_offset = false)
     bool                        safety_offset
     CODE:
         RETVAL = union_ex(subject, safety_offset);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     OUTPUT:
         RETVAL

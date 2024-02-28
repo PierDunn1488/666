@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: test_test
+=======
+name: C/C++ debug arm macos
+>>>>>>> origin/merill-merge
 
 on:
   push:

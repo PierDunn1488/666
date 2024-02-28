@@ -82,8 +82,12 @@ class GCodeSender : private boost::noncopyable {
 
 } // namespace Slic3r
 
+<<<<<<< HEAD
 <<<<<<< HEAD:xs/src/libslic3r/GCodeSender.hpp
 #endif
 =======
 #endif /* slic3r_GCodeSender_hpp_ */
 >>>>>>> origin/merill-merge:src/libslic3r/GCodeSender.hpp
+=======
+#endif /* slic3r_GCodeSender_hpp_ */
+>>>>>>> origin/merill-merge

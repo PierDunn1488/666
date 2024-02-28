@@ -28,16 +28,22 @@
     bool has_overhang_point(Point* point)
         %code{% RETVAL = THIS->has_overhang_point(*point); %};
 <<<<<<< HEAD
+<<<<<<< HEAD
     bool is_perimeter();
     bool is_infill();
     bool is_solid_infill();
     Polygons grow();
     Clone<Polyline> as_polyline();
 =======
+=======
+>>>>>>> origin/merill-merge
     ExtrusionRole role() const;
     ExtrusionLoopRole loop_role() const;
     Polygons polygons_covered_by_width();
     Polygons polygons_covered_by_spacing();
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 %{
 

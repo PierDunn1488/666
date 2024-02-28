@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Test::More tests => 16;
+=======
+use Test::More tests => 38;
+>>>>>>> origin/merill-merge
 =======
 use Test::More tests => 38;
 >>>>>>> origin/merill-merge
@@ -149,8 +153,11 @@ use Slic3r::Test;
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
 =======
+=======
+>>>>>>> origin/merill-merge
     my $config = Slic3r::Config->new;
     $config->set('nozzle_diameter', [0.6,0.6,0.6,0.6,0.6]);
     $config->set('start_gcode', qq!
@@ -207,6 +214,9 @@ use Slic3r::Test;
 
 {
     my $config = Slic3r::Config::new_from_defaults;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
     $config->set('complete_objects', 1);
     $config->set('between_objects_gcode', '_MY_CUSTOM_GCODE_');

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project (slic3r)
 
@@ -593,6 +594,8 @@ endif()
 
 
 =======
+=======
+>>>>>>> origin/merill-merge
 cmake_minimum_required(VERSION 3.13)
 project(Slic3r-native)
 
@@ -870,4 +873,7 @@ else ()
     # Install the symlink for gcodeviewer
     install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink slic3r ${GCODEVIEWER_APP_CMD} WORKING_DIRECTORY \$ENV{DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})")
 endif ()
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge

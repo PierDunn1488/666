@@ -13,6 +13,7 @@ REGISTER_CLASS(ExtrusionSimulator, "ExtrusionSimulator");
 REGISTER_CLASS(Filler, "Filler");
 REGISTER_CLASS(Flow, "Flow");
 <<<<<<< HEAD
+<<<<<<< HEAD
 REGISTER_CLASS(Filler, "Filler");
 REGISTER_CLASS(AvoidCrossingPerimeters, "GCode::AvoidCrossingPerimeters");
 REGISTER_CLASS(CoolingBuffer, "GCode::CoolingBuffer");
@@ -23,6 +24,10 @@ REGISTER_CLASS(GCode, "GCode");
 REGISTER_CLASS(GCodeSender, "GCode::Sender");
 REGISTER_CLASS(GCodeTimeEstimator, "GCode::TimeEstimator");
 REGISTER_CLASS(GCodeWriter, "GCode::Writer");
+=======
+REGISTER_CLASS(CoolingBuffer, "GCode::CoolingBuffer");
+REGISTER_CLASS(GCode, "GCode");
+>>>>>>> origin/merill-merge
 =======
 REGISTER_CLASS(CoolingBuffer, "GCode::CoolingBuffer");
 REGISTER_CLASS(GCode, "GCode");
@@ -65,7 +70,11 @@ REGISTER_CLASS(SlicingAdaptive, "SlicingAdaptive");
 REGISTER_CLASS(Surface, "Surface");
 REGISTER_CLASS(SurfaceCollection, "Surface::Collection");
 <<<<<<< HEAD
+<<<<<<< HEAD
 REGISTER_CLASS(TransformationMatrix, "TransformationMatrix");
+=======
+REGISTER_CLASS(PrintObjectSupportMaterial, "Print::SupportMaterial2");
+>>>>>>> origin/merill-merge
 =======
 REGISTER_CLASS(PrintObjectSupportMaterial, "Print::SupportMaterial2");
 >>>>>>> origin/merill-merge
@@ -80,6 +89,7 @@ SV* ConfigBase__as_hash(ConfigBase* THIS)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 SV*
 ConfigBase__get(ConfigBase* THIS, const t_config_option_key &opt_key) {
     ConfigOption* opt = THIS->option(opt_key);
@@ -88,12 +98,17 @@ ConfigBase__get(ConfigBase* THIS, const t_config_option_key &opt_key) {
     const ConfigOptionDef& def = THIS->def->get(opt_key);
     return ConfigOption_to_SV(*opt, def);
 =======
+=======
+>>>>>>> origin/merill-merge
 SV* ConfigBase__get(ConfigBase* THIS, const t_config_option_key &opt_key)
 {
     ConfigOption *opt = THIS->option(opt_key, false);
     return (opt == nullptr) ? 
         &PL_sv_undef :
         ConfigOption_to_SV(*opt, *THIS->def()->get(opt_key));
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 }
 
@@ -139,6 +154,7 @@ SV* ConfigOption_to_SV(const ConfigOption &opt, const ConfigOptionDef &def)
             av_store(av, &v - optv->values.data(), newSVpvn_utf8(v.c_str(), v.length(), true));
         return newRV_noinc((SV*)av);
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else if (def.type == coPoint) {
         const ConfigOptionPoint* optv = dynamic_cast<const ConfigOptionPoint*>(&opt);
         return perl_to_SV_clone_ref(optv->value);
@@ -148,6 +164,8 @@ SV* ConfigOption_to_SV(const ConfigOption &opt, const ConfigOptionDef &def)
     } else if (def.type == coPoints) {
         const ConfigOptionPoints* optv = dynamic_cast<const ConfigOptionPoints*>(&opt);
 =======
+=======
+>>>>>>> origin/merill-merge
     }
     case coPoint:
         return perl_to_SV_clone_ref(static_cast<const ConfigOptionPoint*>(&opt)->value);
@@ -156,6 +174,9 @@ SV* ConfigOption_to_SV(const ConfigOption &opt, const ConfigOptionDef &def)
     case coPoints:
     {
         auto optv = static_cast<const ConfigOptionPoints*>(&opt);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         AV* av = newAV();
         av_fill(av, optv->values.size()-1);
@@ -187,6 +208,7 @@ SV* ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, siz
         return &PL_sv_undef;
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     const ConfigOptionDef& def = THIS->def->get(opt_key);
     if (def.type == coFloats) {
         ConfigOptionFloats* optv = dynamic_cast<ConfigOptionFloats*>(opt);
@@ -197,6 +219,8 @@ SV* ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, siz
     } else if (def.type == coStrings) {
         ConfigOptionStrings* optv = dynamic_cast<ConfigOptionStrings*>(opt);
 =======
+=======
+>>>>>>> origin/merill-merge
     const ConfigOptionDef* def = THIS->def()->get(opt_key);
     switch (def->type) {
     case coFloats:
@@ -206,6 +230,7 @@ SV* ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, siz
         return newSViv(static_cast<ConfigOptionInts*>(opt)->get_at(i));
     case coStrings:
     {
+<<<<<<< HEAD
 >>>>>>> origin/merill-merge
         // we don't serialize() because that would escape newlines
         const std::string &val = static_cast<ConfigOptionStrings*>(opt)->get_at(i);
@@ -219,12 +244,20 @@ SV* ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, siz
         return newSViv(optv->get_at(i) ? 1 : 0);
     } else {
 =======
+=======
+        // we don't serialize() because that would escape newlines
+        const std::string &val = static_cast<ConfigOptionStrings*>(opt)->get_at(i);
+        return newSVpvn_utf8(val.c_str(), val.length(), true);
+>>>>>>> origin/merill-merge
     }
     case coPoints:
         return perl_to_SV_clone_ref(static_cast<ConfigOptionPoints*>(opt)->get_at(i));
     case coBools:
         return newSViv(static_cast<ConfigOptionBools*>(opt)->get_at(i) ? 1 : 0);
     default:
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         return &PL_sv_undef;
     }
@@ -233,6 +266,7 @@ SV* ConfigBase__get_at(ConfigBase* THIS, const t_config_option_key &opt_key, siz
 bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* value)
 {
     ConfigOption* opt = THIS->option(opt_key, true);
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (opt == NULL) CONFESS("Trying to set non-existing option");
     
@@ -245,6 +279,8 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
         ConfigOptionFloats* optv = dynamic_cast<ConfigOptionFloats*>(opt);
         std::vector<double> values;
 =======
+=======
+>>>>>>> origin/merill-merge
     if (opt == nullptr)
         CONFESS("Trying to set non-existing option");
     const ConfigOptionDef* def = THIS->def()->get(opt_key);
@@ -259,6 +295,9 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
     case coFloats:
     {
         std::vector<double> &values = static_cast<ConfigOptionFloats*>(opt)->values;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
@@ -284,6 +323,7 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
             values.emplace_back(SvNV(*elem));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         optv->values = values;
     } else if (def.type == coInt) {
         if (!looks_like_number(value)) return false;
@@ -297,11 +337,20 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
     }
     case coInt:
         if (!looks_like_number(value)) return false;
+=======
+        break;
+    }
+    case coInt:
+        if (!looks_like_number(value)) return false;
+>>>>>>> origin/merill-merge
         static_cast<ConfigOptionInt*>(opt)->value = SvIV(value);
         break;
     case coInts:
     {
         std::vector<int> &values = static_cast<ConfigOptionInts*>(opt)->values;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
@@ -313,6 +362,7 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
             values.emplace_back(SvIV(*elem));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         optv->values = values;
     } else if (def.type == coString) {
         ConfigOptionString* optv = dynamic_cast<ConfigOptionString*>(opt);
@@ -321,6 +371,8 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
         ConfigOptionStrings* optv = dynamic_cast<ConfigOptionStrings*>(opt);
         optv->values.clear();
 =======
+=======
+>>>>>>> origin/merill-merge
         break;
     }
     case coString:
@@ -329,6 +381,9 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
     case coStrings:
     {
         std::vector<std::string> &values = static_cast<ConfigOptionStrings*>(opt)->values;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
@@ -340,6 +395,7 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
             values.emplace_back(std::string(SvPV_nolen(*elem), SvCUR(*elem)));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else if (def.type == coPoint) {
         ConfigOptionPoint* optv = dynamic_cast<ConfigOptionPoint*>(opt);
         return from_SV_check(value, &optv->value);
@@ -350,6 +406,8 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
         ConfigOptionPoints* optv = dynamic_cast<ConfigOptionPoints*>(opt);
         std::vector<Pointf> values;
 =======
+=======
+>>>>>>> origin/merill-merge
         break;
     }
     case coPoint:
@@ -360,6 +418,9 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
     case coPoints:
     {
         std::vector<Vec2d> &values = static_cast<ConfigOptionPoints*>(opt)->values;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
@@ -372,6 +433,7 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
             values.emplace_back(point);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         optv->values = values;
     } else if (def.type == coBool) {
         ConfigOptionBool* optv = dynamic_cast<ConfigOptionBool*>(opt);
@@ -380,6 +442,8 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
         ConfigOptionBools* optv = dynamic_cast<ConfigOptionBools*>(opt);
         optv->values.clear();
 =======
+=======
+>>>>>>> origin/merill-merge
         break;
     }
     case coBool:
@@ -388,6 +452,9 @@ bool ConfigBase__set(ConfigBase* THIS, const t_config_option_key &opt_key, SV* v
     case coBools:
     {
         std::vector<unsigned char> &values = static_cast<ConfigOptionBools*>(opt)->values;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         AV* av = (AV*)SvRV(value);
         const size_t len = av_len(av)+1;
@@ -429,6 +496,7 @@ void ConfigBase__set_ifndef(ConfigBase* THIS, const t_config_option_key &opt_key
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool
 StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, SV* value) {
     const ConfigOptionDef& optdef = THIS->def->get(opt_key);
@@ -441,6 +509,8 @@ StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, SV* va
     
     return ConfigBase__set(THIS, opt_key, value);
 =======
+=======
+>>>>>>> origin/merill-merge
 bool StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, SV* value)
 {
     const ConfigOptionDef* optdef = THIS->def()->get(opt_key);
@@ -450,6 +520,9 @@ bool StaticConfig__set(StaticConfig* THIS, const t_config_option_key &opt_key, S
         if (! StaticConfig__set(THIS, key, value))
             return false;
     return true;
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 }
 
@@ -746,6 +819,7 @@ SV* to_SV(TriangleMesh* THIS)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 SV*
 polynode_children_2_perl(const ClipperLib::PolyNode& node)
 {
@@ -772,6 +846,8 @@ polynode2perl(const ClipperLib::PolyNode& node)
     return (SV*)newRV_noinc((SV*)hv);
 }
 
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 }

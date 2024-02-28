@@ -5,7 +5,10 @@
 #include "libslic3r/GCode.hpp"
 #include "libslic3r/GCode/CoolingBuffer.hpp"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "libslic3r/GCode/SpiralVase.hpp"
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 %}
@@ -16,6 +19,7 @@
     ~CoolingBuffer();
     Ref<GCode> gcodegen();
     std::string process_layer(std::string gcode, size_t layer_id);
+<<<<<<< HEAD
 };
 
 %name{Slic3r::GCode::CoolingBuffer} class CoolingBuffer {
@@ -38,6 +42,8 @@
     void set_enable(bool enable)
         %code{% THIS->enable = enable; %};
     std::string process_layer(std::string gcode);
+=======
+>>>>>>> origin/merill-merge
 };
 
 %name{Slic3r::GCode} class GCode {
@@ -72,6 +78,7 @@
                 CONFESS("A PrintConfig object was not supplied to apply_print_config()");
             }
         %};
+<<<<<<< HEAD
 <<<<<<< HEAD
     void set_extruders(std::vector<unsigned int> extruder_ids);
     void set_origin(Pointf* pointf)
@@ -108,6 +115,8 @@ GCode::extrude(entity, description, speed)
     OUTPUT:
         RETVAL
 %}
+=======
+>>>>>>> origin/merill-merge
 =======
 >>>>>>> origin/merill-merge
 

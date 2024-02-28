@@ -3,13 +3,18 @@
 
 #include "../libslic3r.h"
 
+<<<<<<< HEAD
 #include "Fill.hpp"
+=======
+#include "FillBase.hpp"
+>>>>>>> origin/merill-merge
 
 namespace Slic3r {
 
 class FillGyroid : public Fill
 {
 public:
+<<<<<<< HEAD
 
     FillGyroid(){}
     virtual Fill* clone() const { return new FillGyroid(*this); };
@@ -27,6 +32,29 @@ protected:
         const std::pair<float, Point>   &direction, 
         ExPolygon                       &expolygon, 
         Polylines                       *polylines_out);
+=======
+    FillGyroid() {}
+    Fill* clone() const override { return new FillGyroid(*this); }
+
+    // Correction applied to regular infill angle to maximize printing
+    // speed in default configuration (degrees)
+    static constexpr float CorrectionAngle = -45.;
+
+    // Density adjustment to have a good %of weight.
+    static constexpr double DensityAdjust = 2.44;
+
+    // Gyroid upper resolution tolerance (mm^-2)
+    static constexpr double PatternTolerance = 0.2;
+
+
+protected:
+    void _fill_surface_single(
+        const FillParams                &params, 
+        unsigned int                     thickness_layers,
+        const std::pair<float, Point>   &direction, 
+        ExPolygon                        expolygon, 
+        Polylines                       &polylines_out) const override;
+>>>>>>> origin/merill-merge
 };
 
 } // namespace Slic3r

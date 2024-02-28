@@ -77,12 +77,18 @@
     void make_perimeters();
     void make_fills();
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/merill-merge
 
     void export_region_slices_to_svg(const char *path);
     void export_region_fill_surfaces_to_svg(const char *path);
     void export_region_slices_to_svg_debug(const char *name);
     void export_region_fill_surfaces_to_svg_debug(const char *name);
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
 };
 

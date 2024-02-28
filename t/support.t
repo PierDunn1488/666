@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Test::More tests => 29;
+=======
+use Test::More;
+>>>>>>> origin/merill-merge
 =======
 use Test::More;
 >>>>>>> origin/merill-merge
@@ -19,8 +23,11 @@ use List::Util qw(first);
 use Slic3r;
 use Slic3r::Flow ':roles';
 <<<<<<< HEAD
+<<<<<<< HEAD
 use Slic3r::Geometry qw(epsilon scale PI);
 =======
+=======
+>>>>>>> origin/merill-merge
 use Slic3r::Geometry qw(epsilon scale);
 >>>>>>> origin/merill-merge
 use Slic3r::Geometry::Clipper qw(diff);
@@ -34,8 +41,11 @@ use Slic3r::Test;
     my $test = sub {
         my $print = Slic3r::Test::init_print('20mm_cube', config => $config);
 <<<<<<< HEAD
+<<<<<<< HEAD
         my $flow = $print->print->objects->[0]->support_material_flow(FLOW_ROLE_SUPPORT_MATERIAL);
 =======
+=======
+>>>>>>> origin/merill-merge
         my $object_config = $print->print->objects->[0]->config;
         my $flow = Slic3r::Flow->new_from_width(
             width               => $object_config->support_material_extrusion_width || $object_config->extrusion_width,
@@ -44,6 +54,9 @@ use Slic3r::Test;
             layer_height        => $object_config->layer_height,
             bridge_flow_ratio   => 0,
         );
+<<<<<<< HEAD
+>>>>>>> origin/merill-merge
+=======
 >>>>>>> origin/merill-merge
         my $support = Slic3r::Print::SupportMaterial->new(
             object_config       => $print->print->objects->[0]->config,
@@ -165,6 +178,7 @@ use Slic3r::Test;
 
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     my $config = Slic3r::Config->new_from_defaults;
     $config->set('layer_height', 0.2);
     $config->set('skirts', 0);
@@ -221,6 +235,9 @@ use Slic3r::Test;
 
 {
     my $config = Slic3r::Config->new_from_defaults;
+=======
+    my $config = Slic3r::Config::new_from_defaults;
+>>>>>>> origin/merill-merge
 =======
     my $config = Slic3r::Config::new_from_defaults;
 >>>>>>> origin/merill-merge
